@@ -114,11 +114,11 @@ function Navbar() {
         {/* Logo */}
         <a href="#hero" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center text-stone-950 font-black text-lg leading-none group-hover:bg-amber-500 transition-colors">
-            T
+            M
           </div>
           <div className="leading-tight">
-            <div className="font-display text-amber-50 text-lg tracking-wide">Thornton Timber</div>
-            <div className="text-amber-600 text-[10px] uppercase tracking-[0.2em] font-medium">Restoration · Denver</div>
+            <div className="font-display text-amber-50 text-lg tracking-wide">Maestas Furniture</div>
+            <div className="text-amber-600 text-[10px] uppercase tracking-[0.2em] font-medium">Repair & Restoration · Denver</div>
           </div>
         </a>
 
@@ -215,7 +215,7 @@ function Hero() {
         <div className="inline-flex items-center gap-3 mb-8 animate-fade-in">
           <div className="h-px w-12 bg-amber-600" />
           <span className="text-amber-500 text-xs uppercase tracking-[0.3em] font-semibold">
-            Denver's Premier Furniture Craftsmen
+            Denver's Premier Furniture Repair Specialists
           </span>
           <div className="h-px w-12 bg-amber-600" />
         </div>
@@ -231,8 +231,8 @@ function Hero() {
 
         {/* Sub */}
         <p className="text-stone-300 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-up animation-delay-200">
-          Three generations of woodworking expertise, now serving the Denver metro area.
-          We restore the pieces that matter most — from heirloom antiques to everyday essentials.
+          Trusted furniture repair and restoration, now serving the Denver metro area.
+          We fix the pieces that matter most — from family heirlooms to everyday favorites, wood, upholstery, and everything in between.
         </p>
 
         {/* CTAs */}
@@ -254,7 +254,7 @@ function Hero() {
 
         {/* Stats strip */}
         <div className="mt-20 grid grid-cols-3 gap-4 max-w-lg mx-auto animate-slide-up animation-delay-600">
-          {[["25+", "Years Experience"], ["1,200+", "Pieces Restored"], ["5★", "Google Rating"]].map(
+          {[["20+", "Years Experience"], ["1,200+", "Pieces Restored"], ["5★", "Google Rating"]].map(
             ([num, label]) => (
               <div key={label} className="text-center">
                 <div className="font-display text-3xl text-amber-400">{num}</div>
@@ -426,13 +426,13 @@ function About() {
             <div className="absolute -inset-4 border border-amber-700/30 rounded-sm -rotate-2" />
             <img
               src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=85"
-              alt="Robert Thornton at work"
+              alt="Brandon Maestas at work"
               className="relative w-full aspect-[4/5] object-cover object-center rounded-sm"
             />
             {/* Floating badge */}
             <div className="absolute -bottom-6 -right-6 bg-amber-600 text-stone-950 p-5 rounded-sm shadow-xl">
-              <div className="font-display text-3xl leading-none">25</div>
-              <div className="text-[10px] uppercase tracking-widest font-bold mt-1">Years<br/>Craft</div>
+              <div className="font-display text-3xl leading-none">20</div>
+              <div className="text-[10px] uppercase tracking-widest font-bold mt-1">Years<br/>Expert</div>
             </div>
           </div>
 
@@ -446,23 +446,23 @@ function About() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-8 bg-amber-500" />
-              <span className="text-amber-500 text-xs uppercase tracking-[0.25em] font-semibold">Meet the Maker</span>
+              <span className="text-amber-500 text-xs uppercase tracking-[0.25em] font-semibold">Meet the Owner</span>
             </div>
             <h2 className="font-display text-4xl md:text-5xl text-amber-50 leading-tight mb-8">
-              Robert Thornton,<br />
-              <span className="text-amber-400">Third-Generation</span><br />
-              Woodworker
+              Brandon Maestas,<br />
+              <span className="text-amber-400">20+ Years</span><br />
+              Furniture Repair Pro
             </h2>
             <div className="space-y-5 text-amber-100/70 leading-relaxed">
               <p>
-                My grandfather built furniture in a one-room shop in Appalachia. My father brought those
-                traditions West, setting up in Denver in 1978. I've spent 25 years learning at his bench —
-                and then 15 more years building my own reputation for quality that lasts.
+                I've been repairing furniture since I was a teenager working summers in my uncle's shop.
+                Over 20 years later, I've seen just about every kind of damage imaginable — and fixed it.
+                Wood, metal, upholstery, leather, laminate — if it's furniture, I can bring it back.
               </p>
               <p>
-                At Thornton Timber Restoration, we believe every piece of furniture carries a story.
-                Whether it's a wobbly dining chair that's hosted a thousand family dinners, or a secretary
-                desk handed down through four generations, our job is to ensure those stories continue.
+                At Maestas Furniture Repair, we believe every piece of furniture has a story worth
+                preserving. Whether it's a dining set that's hosted decades of family dinners, or a
+                sofa you just can't part with, our job is to make it look and feel like new.
               </p>
               <p>
                 We serve the entire Denver metro, including Boulder, Aurora, Lakewood, and Highlands Ranch.
@@ -540,7 +540,7 @@ function Contact() {
               {[
                 ["📍", "Service Area", "Denver Metro · Boulder · Aurora\nLakewood · Highlands Ranch"],
                 ["📞", "Phone", "(720) 555-0192"],
-                ["📧", "Email", "hello@thorntontimber.com"],
+                ["📧", "Email", "hello@maestasfurniture.com"],
                 ["🕐", "Hours", "Mon–Fri: 8am–6pm\nSat: 9am–3pm"],
               ].map(([icon, label, value]) => (
                 <div key={label} className="flex gap-4">
@@ -568,7 +568,7 @@ function Contact() {
                 <div className="text-5xl mb-6">🪵</div>
                 <h3 className="font-display text-3xl text-stone-900 mb-4">Message Received!</h3>
                 <p className="text-stone-500 max-w-sm">
-                  Thank you for reaching out. Robert will personally review your project and respond within one business day.
+                  Thank you for reaching out. Brandon will personally review your project and respond within one business day.
                 </p>
               </div>
             ) : (
@@ -697,8 +697,8 @@ function Footer() {
   return (
     <footer className="bg-stone-950 border-t border-stone-800 py-10">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
-        <div className="font-display text-stone-400 text-base">Thornton Timber Restoration</div>
-        <p>© {new Date().getFullYear()} Thornton Timber Restoration LLC · Denver, CO · All rights reserved.</p>
+        <div className="font-display text-stone-400 text-base">Maestas Furniture Repair</div>
+        <p>© {new Date().getFullYear()} Maestas Furniture Repair LLC · Denver, CO · All rights reserved.</p>
         <p>Built with ♥ and sawdust</p>
       </div>
     </footer>
