@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restore & Refinish Furniture Repair | Denver, CO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0c;
+      --bg2: #111111;
+      --bg3: #161616;
+      --surface: #1c1c1c;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --white: #f5f2ee;
+      --white-dim: rgba(245,242,238,0.55);
+      --white-faint: rgba(245,242,238,0.2);
+      --gold: #c9a84c;
+      --gold-light: #e0bc6a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --green: #4a7c5f;
+      --green-light: #5d9973;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Outfit', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--white); background: var(--bg); overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px; height: 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid transparent;
+      transition: all 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(12,12,12,0.97); backdrop-filter: blur(12px);
+      border-bottom-color: var(--border);
+    }
+    .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .logo-mark {
+      width: 40px; height: 40px; border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); color: var(--gold); font-size: 22px; font-weight: 600;
+    }
+    .logo-words { line-height: 1.15; }
+    .logo-name { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: 0.01em; display: block; }
+    .logo-sub { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--white-dim); font-size: 13px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      padding: 10px 24px; border: 1px solid var(--gold); color: var(--gold);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.25s;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh; position: relative;
+      display: grid; grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .hero-left {
+      padding: 160px 64px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+    }
+    .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+    .hero-eyebrow-text { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .hero h1 {
+      font-family: var(--font-display); font-size: clamp(52px, 5.5vw, 82px);
+      color: var(--white); line-height: 1.0; font-weight: 300; margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em { color: var(--gold); font-style: italic; font-weight: 300; }
+    .hero h1 strong { font-weight: 600; }
+    .hero-sub { color: var(--white-dim); font-size: 16px; line-height: 1.75; max-width: 420px; margin-bottom: 48px; font-weight: 300; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-gold {
+      display: inline-block; padding: 16px 36px;
+      background: var(--gold); color: var(--bg);
+      font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.25s;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-block; padding: 16px 36px;
+      border: 1px solid var(--border2); color: var(--white-dim);
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.25s;
+    }
+    .btn-outline:hover { border-color: var(--white-dim); color: var(--white); }
+
+    /* Hero right — full-height image with overlay grid */
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.5) saturate(0.8);
+    }
+    /* Vertical text decoration */
+    .hero-vert-text {
+      position: absolute; right: 32px; top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      transform-origin: center center;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.5; white-space: nowrap;
+    }
+    /* Bottom stat strip */
+    .hero-stats {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(12,12,12,0.85); backdrop-filter: blur(8px);
+      display: grid; grid-template-columns: repeat(3,1fr);
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat {
+      padding: 20px 24px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-num { font-family: var(--font-display); font-size: 32px; color: var(--gold); font-weight: 600; line-height: 1; }
+    .hero-stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-dim); margin-top: 6px; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap { background: var(--gold); overflow: hidden; padding: 14px 0; }
+    .marquee { display: flex; gap: 0; animation: marquee 22s linear infinite; width: max-content; }
+    .marquee-item { padding: 0 40px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bg); white-space: nowrap; }
+    .marquee-item::after { content: '·'; margin-left: 40px; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── SERVICES ── */
+    .services { background: var(--bg2); padding: 100px 40px; }
+    .services-inner { max-width: 1200px; margin: 0 auto; }
+    .two-col-header {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: end; margin-bottom: 64px;
+    }
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
+    .eyebrow-text { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+    .display-title { font-family: var(--font-display); font-size: clamp(36px,4vw,58px); color: var(--white); font-weight: 300; line-height: 1.05; }
+    .display-title em { font-style: italic; color: var(--gold); }
+    .body-text { color: var(--white-dim); font-size: 15px; line-height: 1.8; font-weight: 300; }
+    .services-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+    .service-item {
+      background: var(--bg2); padding: 40px 36px;
+      transition: background 0.3s; cursor: default;
+    }
+    .service-item:hover { background: var(--surface); }
+    .service-num { font-family: var(--font-display); font-size: 48px; color: var(--gold); opacity: 0.25; line-height: 1; margin-bottom: 20px; font-weight: 600; }
+    .service-name { font-family: var(--font-display); font-size: 22px; color: var(--white); margin-bottom: 12px; font-weight: 400; }
+    .service-desc { color: var(--white-dim); font-size: 14px; line-height: 1.7; font-weight: 300; }
+    .service-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 2px;
+    }
+
+    /* ── PORTFOLIO ── */
+    .portfolio { background: var(--bg); padding: 100px 40px; }
+    .portfolio-inner { max-width: 1200px; margin: 0 auto; }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: auto auto;
+      gap: 12px; margin-top: 56px;
+    }
+    .p-item { position: relative; overflow: hidden; cursor: pointer; }
+    .p-item:nth-child(1) { grid-column: span 4; }
+    .p-item:nth-child(2) { grid-column: span 2; }
+    .p-item:nth-child(3) { grid-column: span 2; }
+    .p-item:nth-child(4) { grid-column: span 4; }
+    .p-img-pair { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+    .p-img-pair img { width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); filter: brightness(0.75); }
+    .p-item:hover .p-img-pair img { transform: scale(1.05); filter: brightness(0.9); }
+    .p-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(12,12,12,0.95) 0%, transparent 100%);
+      padding: 24px 20px 18px;
+    }
+    .p-label { font-family: var(--font-display); font-size: 18px; color: var(--white); font-weight: 400; }
+    .p-detail { font-size: 12px; color: var(--gold); letter-spacing: 0.06em; margin-top: 4px; }
+    .p-badge {
+      position: absolute; top: 12px; padding: 4px 10px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .badge-before { left: 12px; background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.7); }
+    .badge-after { right: 12px; background: var(--gold); color: var(--bg); left: auto; }
+
+    /* ── PROCESS ── */
+    .process { background: var(--bg3); padding: 100px 40px; }
+    .process-inner { max-width: 1200px; margin: 0 auto; }
+    .process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: 64px; }
+    .process-step {
+      padding: 0 40px 0 0; position: relative;
+    }
+    .process-step:not(:last-child)::after {
+      content: '';
+      position: absolute; right: 20px; top: 28px;
+      width: 1px; height: 40px; background: var(--border2);
+    }
+    .process-step-num {
+      font-family: var(--font-display); font-size: 64px; color: var(--gold);
+      opacity: 0.2; line-height: 1; margin-bottom: 24px; font-weight: 600;
+    }
+    .process-step-title { font-family: var(--font-display); font-size: 22px; color: var(--white); margin-bottom: 12px; font-weight: 400; }
+    .process-step-desc { color: var(--white-dim); font-size: 14px; line-height: 1.7; font-weight: 300; }
+
+    /* ── ABOUT ── */
+    .about { background: var(--bg); padding: 0; overflow: hidden; }
+    .about-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .about-image { position: relative; min-height: 600px; }
+    .about-image img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.65) saturate(0.7); }
+    .about-image-caption {
+      position: absolute; bottom: 32px; left: 32px;
+      font-family: var(--font-display); font-size: 13px; color: var(--gold);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .about-content {
+      padding: 80px 64px; background: var(--bg3);
+      display: flex; flex-direction: column; justify-content: center;
+      border-left: 1px solid var(--border);
+    }
+    .about-quote {
+      font-family: var(--font-display); font-size: clamp(22px, 2.5vw, 32px);
+      color: var(--white); font-weight: 300; font-style: italic; line-height: 1.4;
+      margin: 28px 0 32px; padding-left: 24px; border-left: 2px solid var(--gold);
+    }
+    .about-bio { color: var(--white-dim); font-size: 15px; line-height: 1.8; font-weight: 300; margin-bottom: 16px; }
+    .about-credentials { display: flex; flex-direction: column; gap: 10px; margin: 28px 0 36px; }
+    .cred { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--white-dim); }
+    .cred::before { content: '—'; color: var(--gold); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--surface); padding: 100px 40px; }
+    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+    .testimonial {
+      padding: 36px; border: 1px solid var(--border);
+      background: var(--bg); transition: border-color 0.3s;
+    }
+    .testimonial:hover { border-color: var(--gold); }
+    .testimonial-stars { color: var(--gold); font-size: 14px; letter-spacing: 3px; margin-bottom: 20px; }
+    .testimonial-text { font-family: var(--font-display); font-size: 18px; color: var(--white); line-height: 1.6; font-weight: 300; font-style: italic; margin-bottom: 24px; }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; border-top: 1px solid var(--border); padding-top: 20px; }
+    .testimonial-avatar {
+      width: 40px; height: 40px; border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); color: var(--gold); font-size: 18px;
+    }
+    .testimonial-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .testimonial-loc { font-size: 11px; color: var(--white-dim); letter-spacing: 0.05em; margin-top: 2px; }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--bg2); padding: 100px 40px; }
+    .contact-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+    .contact-details { padding-top: 12px; }
+    .contact-tagline { font-family: var(--font-display); font-size: 14px; font-style: italic; color: var(--gold); margin: 24px 0; }
+    .contact-info-list { display: flex; flex-direction: column; gap: 24px; margin-top: 40px; }
+    .contact-info-item { display: flex; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .contact-info-item:last-child { border-bottom: none; }
+    .contact-info-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .contact-info-val { font-size: 15px; color: var(--white); font-weight: 300; line-height: 1.5; }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 0; }
+    .form-field { margin-bottom: 20px; }
+    .form-field label { display: block; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .form-field input, .form-field textarea {
+      width: 100%; padding: 14px 0; background: transparent;
+      border: none; border-bottom: 1px solid var(--border2);
+      color: var(--white); font-family: var(--font-body); font-size: 15px; font-weight: 300;
+      outline: none; transition: border-color 0.2s; appearance: none;
+    }
+    .form-field input:focus, .form-field textarea:focus { border-bottom-color: var(--gold); }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: var(--white-faint); }
+    .form-field textarea { resize: none; height: 100px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .form-file-label {
+      display: block; padding: 14px 0; border-bottom: 1px solid var(--border2);
+      font-size: 14px; color: var(--white-faint); cursor: pointer; transition: color 0.2s;
+    }
+    .form-file-label:hover { color: var(--white); }
+    .form-file-input { display: none; }
+    .form-submit-btn {
+      margin-top: 12px; padding: 18px 0;
+      background: var(--gold); color: var(--bg);
+      border: none; font-family: var(--font-body); font-size: 13px;
+      font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.25s; width: 100%;
+    }
+    .form-submit-btn:hover { background: var(--gold-light); }
+    .form-note { font-size: 12px; color: var(--white-faint); margin-top: 14px; text-align: center; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 40px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo-text { font-family: var(--font-display); font-size: 18px; color: var(--white); }
+    .footer-copy { font-size: 12px; color: var(--white-faint); letter-spacing: 0.04em; }
+    .footer-gold { color: var(--gold); font-size: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 130px 32px 60px; }
+      .two-col-header, .about-inner, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .services-list { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; }
+      .p-item { grid-column: span 1 !important; }
+      .process-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .process-step::after { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .services-list, .process-steps { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: repeat(3,1fr); }
+      .nav { padding: 0 20px; }
+      .services, .portfolio, .process, .testimonials, .contact { padding: 70px 24px; }
+    }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="logo">
+    <div class="logo-mark">R</div>
+    <div class="logo-words">
+      <span class="logo-name">Restore & Refinish</span>
+      <span class="logo-sub">Furniture Repair · Denver</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Free Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Denver's Furniture Repair Specialists</span>
+    </div>
+    <h1>Furniture<br><em>Restored</em> to<br><strong>Perfection</strong></h1>
+    <p class="hero-sub">We repair, restore, and refinish furniture of every kind — wood, upholstery, leather, and more. Trusted by Denver homeowners for over 20 years.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-gold">Get a Free Quote</a>
+      <a href="#portfolio" class="btn-outline">View Our Work</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=1200&q=80" alt="Furniture workshop" />
+    <div class="hero-vert-text">Est. 2004 · Denver, Colorado</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">1,200+</div>
+        <div class="hero-stat-label">Pieces Restored</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">20+</div>
+        <div class="hero-stat-label">Years Experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5.0★</div>
+        <div class="hero-stat-label">Google Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee">
+    <span class="marquee-item">Scratch & Dent Repair</span>
+    <span class="marquee-item">Antique Restoration</span>
+    <span class="marquee-item">Upholstery Repair</span>
+    <span class="marquee-item">Structural Repair</span>
+    <span class="marquee-item">Leather Restoration</span>
+    <span class="marquee-item">Refinishing & Polishing</span>
+    <span class="marquee-item">Free Estimates</span>
+    <span class="marquee-item">Denver Metro Service</span>
+    <span class="marquee-item">Scratch & Dent Repair</span>
+    <span class="marquee-item">Antique Restoration</span>
+    <span class="marquee-item">Upholstery Repair</span>
+    <span class="marquee-item">Structural Repair</span>
+    <span class="marquee-item">Leather Restoration</span>
+    <span class="marquee-item">Refinishing & Polishing</span>
+    <span class="marquee-item">Free Estimates</span>
+    <span class="marquee-item">Denver Metro Service</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <div class="two-col-header reveal">
+      <div>
+        <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">What We Do</span></div>
+        <h2 class="display-title">Every Type of<br>Furniture <em>Repaired</em></h2>
+      </div>
+      <p class="body-text">From a hairline scratch on your dining table to a fully collapsed antique frame, our team brings 20 years of hands-on expertise to every job — large or small.</p>
+    </div>
+    <div class="services-list reveal">
+      <div class="service-item">
+        <div class="service-num">01</div>
+        <div class="service-name">Scratch & Dent Repair</div>
+        <div class="service-desc">Invisible blending using hand-mixed stains matched to your original finish. No patch, no trace.</div>
+        <span class="service-tag">Wood · Veneer · Laminate</span>
+      </div>
+      <div class="service-item">
+        <div class="service-num">02</div>
+        <div class="service-name">Antique Restoration</div>
+        <div class="service-desc">Period-appropriate techniques and materials that preserve the original character and value of your piece.</div>
+        <span class="service-tag">All Eras Welcome</span>
+      </div>
+      <div class="service-item">
+        <div class="service-num">03</div>
+        <div class="service-name">Structural Repair</div>
+        <div class="service-desc">Full disassembly, old glue removal, and precision regluing for wobble-free results that last decades.</div>
+        <span class="service-tag">Chairs · Tables · Frames</span>
+      </div>
+      <div class="service-item">
+        <div class="service-num">04</div>
+        <div class="service-name">Upholstery Repair</div>
+        <div class="service-desc">Torn fabric, damaged foam, broken frames. We restore your sofas, chairs, and cushions to like-new.</div>
+        <span class="service-tag">Fabric · Foam · Springs</span>
+      </div>
+      <div class="service-item">
+        <div class="service-num">05</div>
+        <div class="service-name">Refinishing & Polishing</div>
+        <div class="service-desc">Strip decades of wear and apply a hand-rubbed oil, lacquer, or shellac finish tailored to your taste.</div>
+        <span class="service-tag">All Finish Types</span>
+      </div>
+      <div class="service-item">
+        <div class="service-num">06</div>
+        <div class="service-name">Leather Restoration</div>
+        <div class="service-desc">Cracked, faded, or torn leather cleaned, conditioned, and color-matched back to its former glory.</div>
+        <span class="service-tag">All Leather Types</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-inner">
+    <div class="two-col-header reveal">
+      <div>
+        <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">Before & After</span></div>
+        <h2 class="display-title">The Work<br><em>Speaks</em> for Itself</h2>
+      </div>
+      <p class="body-text">Each project tells a story. Browse a selection of recent restorations from across the Denver metro area.</p>
+    </div>
+    <div class="portfolio-grid reveal">
+      <div class="p-item">
+        <div class="p-img-pair">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" alt="Before" />
+          <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80" alt="After" />
+        </div>
+        <span class="p-badge badge-before">Before</span>
+        <span class="p-badge badge-after">After</span>
+        <div class="p-overlay">
+          <div class="p-label">Victorian Parlour Chair</div>
+          <div class="p-detail">Reglued joints · Fabric replaced · Finish restored</div>
+        </div>
+      </div>
+      <div class="p-item">
+        <div class="p-img-pair">
+          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80" alt="Before" />
+          <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600&q=80" alt="After" />
+        </div>
+        <span class="p-badge badge-before">Before</span>
+        <span class="p-badge badge-after">After</span>
+        <div class="p-overlay">
+          <div class="p-label">Mid-Century Credenza</div>
+          <div class="p-detail">Deep scratch repair · Tung oil refinish</div>
+        </div>
+      </div>
+      <div class="p-item">
+        <div class="p-img-pair">
+          <img src="https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=600&q=80" alt="Before" />
+          <img src="https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80" alt="After" />
+        </div>
+        <span class="p-badge badge-before">Before</span>
+        <span class="p-badge badge-after">After</span>
+        <div class="p-overlay">
+          <div class="p-label">Farmhouse Dining Table</div>
+          <div class="p-detail">Water ring removal · Full refinish</div>
+        </div>
+      </div>
+      <div class="p-item">
+        <div class="p-img-pair">
+          <img src="https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&q=80" alt="Before" />
+          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80" alt="After" />
+        </div>
+        <span class="p-badge badge-before">Before</span>
+        <span class="p-badge badge-after">After</span>
+        <div class="p-overlay">
+          <div class="p-label">Antique Secretary Desk</div>
+          <div class="p-detail">Veneer rebonded · Shellac polish</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-inner">
+    <div class="reveal">
+      <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">How It Works</span></div>
+      <h2 class="display-title" style="margin-top:16px">Simple from<br><em>Start to Finish</em></h2>
+    </div>
+    <div class="process-steps reveal">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <div class="process-step-title">Submit Your Photos</div>
+        <div class="process-step-desc">Fill out our quick form and upload a photo of the damage. Takes less than 2 minutes.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <div class="process-step-title">Receive Your Estimate</div>
+        <div class="process-step-desc">Brandon personally reviews your project and sends a detailed, honest quote within 24 hours.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <div class="process-step-title">We Handle Pickup</div>
+        <div class="process-step-desc">We schedule a convenient pickup — or you drop it at our Denver workshop. Your call.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <div class="process-step-title">Delivery & Delight</div>
+        <div class="process-step-desc">Your restored piece is delivered back to you. 100% satisfaction guaranteed, every time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-image">
+      <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=85" alt="Brandon Maestas" />
+      <div class="about-image-caption">Brandon Maestas · Owner & Master Craftsman</div>
+    </div>
+    <div class="about-content">
+      <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">About Us</span></div>
+      <h2 class="display-title" style="margin-top:20px;margin-bottom:0">Brandon<br><em>Maestas</em></h2>
+      <blockquote class="about-quote">"Every piece of furniture has a story worth preserving."</blockquote>
+      <p class="about-bio">I've been repairing furniture since I was a teenager working summers in my uncle's shop. Over 20 years later, I've seen just about every kind of damage imaginable — and fixed it all.</p>
+      <p class="about-bio">Restore & Refinish is a locally owned Denver business. When you work with us, you work directly with me.</p>
+      <div class="about-credentials">
+        <div class="cred">20+ years hands-on experience</div>
+        <div class="cred">All furniture types: wood, leather, upholstery</div>
+        <div class="cred">Free pickup & delivery across Denver metro</div>
+        <div class="cred">Licensed, insured & locally owned since 2004</div>
+      </div>
+      <a href="#contact" class="btn-gold" style="align-self:flex-start">Start With a Free Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="two-col-header reveal">
+      <div>
+        <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">Reviews</span></div>
+        <h2 class="display-title">What Our<br>Clients <em>Say</em></h2>
+      </div>
+      <p class="body-text">Trusted by hundreds of Denver homeowners. Every review is real — we let our work do the talking.</p>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Brandon restored my grandmother's dining set. I cried when I saw it. Absolutely incredible work, so reasonably priced."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Sarah M.</div><div class="testimonial-loc">Cherry Creek, Denver</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"My mid-century sofa had a huge tear and a cracked frame. They fixed everything — it looks even better than when I bought it."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">T</div>
+          <div><div class="testimonial-name">Tom R.</div><div class="testimonial-loc">Highlands Ranch</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Honest pricing, fast turnaround, exceptional results. Now I'm bringing in our entire bedroom set. Brandon is the real deal."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Lisa K.</div><div class="testimonial-loc">Lakewood</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-details reveal">
+      <div class="eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">Get in Touch</span></div>
+      <h2 class="display-title" style="margin-top:20px">Let's Restore<br><em>Your Piece</em></h2>
+      <p class="contact-tagline">"No obligation. No pressure. Just honest work."</p>
+      <p class="body-text">Describe your furniture, upload a photo, and Brandon will personally get back to you with a detailed, no-obligation quote within one business day.</p>
+      <div class="contact-info-list">
+        <div class="contact-info-item">
+          <div><div class="contact-info-label">Phone</div><div class="contact-info-val">(720) 555-0192</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div><div class="contact-info-label">Email</div><div class="contact-info-val">hello@restoreandrefinish.com</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div><div class="contact-info-label">Service Area</div><div class="contact-info-val">Denver · Boulder · Aurora<br>Lakewood · Highlands Ranch</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div><div class="contact-info-label">Hours</div><div class="contact-info-val">Mon–Fri 8am–6pm · Sat 9am–3pm</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form name="restore-refinish-quote" data-netlify="true" method="POST" enctype="multipart/form-data" class="contact-form">
+        <input type="hidden" name="form-name" value="restore-refinish-quote" />
+        <div class="form-row-2">
+          <div class="form-field">
+            <label>First Name *</label>
+            <input type="text" name="first-name" placeholder="Jane" required />
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input type="text" name="last-name" placeholder="Doe" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="jane@email.com" required />
+        </div>
+        <div class="form-field">
+          <label>Phone</label>
+          <input type="tel" name="phone" placeholder="(720) 555-0100" />
+        </div>
+        <div class="form-field">
+          <label>Describe the Damage *</label>
+          <textarea name="description" placeholder="What piece needs repair? What's the issue?" required></textarea>
+        </div>
+        <div class="form-field">
+          <label>Upload a Photo</label>
+          <label class="form-file-label" id="file-label">📎 Click to attach a photo of the damage</label>
+          <input type="file" name="image" accept="image/*" class="form-file-input" id="file-input" />
+        </div>
+        <button type="submit" class="form-submit-btn">Send Quote Request</button>
+        <p class="form-note">Your information is never shared or sold.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo-text">Restore & Refinish Furniture Repair</div>
+  <div class="footer-copy">© 2025 Restore & Refinish Furniture Repair LLC · Denver, CO</div>
+  <div class="footer-gold">Est. 2004</div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // File input label
+  const fileInput = document.getElementById('file-input');
+  const fileLabel = document.getElementById('file-label');
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      fileLabel.textContent = fileInput.files[0]?.name || '📎 Click to attach a photo';
+      fileLabel.style.color = 'var(--gold)';
+    });
+    fileLabel.addEventListener('click', () => fileInput.click());
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
