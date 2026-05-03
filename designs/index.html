@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Concepts — Restore & Refinish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: #0f0f0f; color: #f5f2ee; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 48px 24px;
+    }
+    .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #c9a84c; font-weight: 600; margin-bottom: 16px; text-align: center;
+    }
+    h1 {
+      font-family: 'Fraunces', Georgia, serif; font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900; text-align: center; margin-bottom: 12px; line-height: 1.05;
+    }
+    .subtitle {
+      color: rgba(245,242,238,0.5); font-size: 15px; text-align: center;
+      max-width: 480px; line-height: 1.65; margin-bottom: 56px;
+    }
+    .cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      max-width: 900px; width: 100%;
+    }
+    .card {
+      background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit;
+      transition: border-color 0.3s, transform 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+    .card-preview {
+      height: 220px; position: relative; overflow: hidden;
+    }
+    .card-preview iframe {
+      width: 200%; height: 200%; border: none;
+      transform: scale(0.5); transform-origin: top left;
+      pointer-events: none;
+    }
+    .card-preview-fallback {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      justify-content: center; font-size: 48px;
+    }
+    .card-body { padding: 24px 28px 28px; flex: 1; display: flex; flex-direction: column; }
+    .card-tag {
+      display: inline-block; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #c9a84c; border: 1px solid #c9a84c; padding: 4px 10px; border-radius: 100px;
+      margin-bottom: 14px; font-weight: 600;
+    }
+    .card-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 900; margin-bottom: 10px; }
+    .card-desc { color: rgba(245,242,238,0.5); font-size: 14px; line-height: 1.65; flex: 1; margin-bottom: 20px; }
+    .card-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #c9a84c; color: #0f0f0f;
+      padding: 12px 24px; border-radius: 6px; font-size: 13px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s; align-self: flex-start;
+    }
+    .card:hover .card-btn { background: #e0bc6a; }
+    .footer-note {
+      margin-top: 48px; color: rgba(245,242,238,0.3);
+      font-size: 12px; text-align: center; letter-spacing: 0.04em;
+    }
+    /* Color swatches as preview */
+    .preview-1 { background: linear-gradient(135deg, #0f2040 0%, #1e4fa3 50%, #e8a020 100%); }
+    .preview-2 { background: linear-gradient(135deg, #0c0c0c 0%, #1c1c1c 50%, #c9a84c 100%); }
+    .preview-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      padding: 10px 16px; font-size: 12px; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.7); text-transform: uppercase;
+    }
+    @media (max-width: 640px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <p class="eyebrow">Restore & Refinish Furniture Repair · Design Preview</p>
+  <h1>Choose Your Favourite Design</h1>
+  <p class="subtitle">We've prepared two distinct website concepts. Click each to view the full design, then let us know which direction feels right for your brand.</p>
+
+  <div class="cards">
+    <a class="card" href="./design-1-corporate/" target="_blank">
+      <div class="card-preview preview-1">
+        <div class="preview-label">🏢 Light · Navy & Gold · Professional</div>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Option 1</span>
+        <div class="card-title">Clean & Professional</div>
+        <p class="card-desc">A bright, trust-first layout with a quote form in the hero, bold navy & gold branding, review cards, and a clear step-by-step process section. Built to convert visitors into calls.</p>
+        <a class="card-btn" href="./design-1-corporate/" target="_blank">View Design 1 →</a>
+      </div>
+    </a>
+
+    <a class="card" href="./design-2-dark-premium/" target="_blank">
+      <div class="card-preview preview-2">
+        <div class="preview-label">🌑 Dark · Black & Gold · Premium</div>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Option 2</span>
+        <div class="card-title">Dark & Premium</div>
+        <p class="card-desc">A sophisticated dark theme with editorial typography, a gold scrolling ticker, split-screen hero, and refined underline form fields. Feels luxury and high-end.</p>
+        <a class="card-btn" href="./design-2-dark-premium/" target="_blank">View Design 2 →</a>
+      </div>
+    </a>
+  </div>
+
+  <p class="footer-note">Both designs are fully responsive and include all sections: Services, Portfolio, About, and Contact.</p>
+</body>
+</html>
