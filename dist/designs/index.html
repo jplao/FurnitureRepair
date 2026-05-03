@@ -4,115 +4,161 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Design Concepts — Restore & Refinish</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Manrope', system-ui, sans-serif;
-      background: #0f0f0f; color: #f5f2ee; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 48px 24px;
+      background: #0f0f0f; color: #f5f2ee;
+      min-height: 100vh; padding: 56px 24px 64px;
     }
+    .top { text-align: center; max-width: 600px; margin: 0 auto 60px; }
     .eyebrow {
       font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-      color: #c9a84c; font-weight: 600; margin-bottom: 16px; text-align: center;
+      color: #c9a84c; font-weight: 700; margin-bottom: 16px;
     }
     h1 {
-      font-family: 'Fraunces', Georgia, serif; font-size: clamp(32px, 5vw, 52px);
-      font-weight: 900; text-align: center; margin-bottom: 12px; line-height: 1.05;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(30px, 5vw, 48px); font-weight: 900; line-height: 1.05;
+      margin-bottom: 14px;
     }
-    .subtitle {
-      color: rgba(245,242,238,0.5); font-size: 15px; text-align: center;
-      max-width: 480px; line-height: 1.65; margin-bottom: 56px;
-    }
+    .divider { width: 48px; height: 2px; background: #c9a84c; margin: 20px auto; border-radius: 2px; }
+    .subtitle { color: rgba(245,242,238,0.5); font-size: 15px; line-height: 1.65; }
+
     .cards {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-      max-width: 900px; width: 100%;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; max-width: 1100px; margin: 0 auto;
     }
     .card {
-      background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit;
-      transition: border-color 0.3s, transform 0.3s;
+      background: #191919; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; overflow: hidden; text-decoration: none; color: inherit;
       display: flex; flex-direction: column;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
-    .card:hover { border-color: #c9a84c; transform: translateY(-4px); }
-    .card-preview {
-      height: 220px; position: relative; overflow: hidden;
+    .card:hover {
+      border-color: #c9a84c; transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
     }
-    .card-preview iframe {
-      width: 200%; height: 200%; border: none;
-      transform: scale(0.5); transform-origin: top left;
-      pointer-events: none;
+    .preview {
+      height: 180px; position: relative;
+      display: flex; align-items: center; justify-content: center;
     }
-    .card-preview-fallback {
-      width: 100%; height: 100%; display: flex; align-items: center;
-      justify-content: center; font-size: 48px;
+    .preview-original  { background: linear-gradient(135deg, #1c0f00 0%, #3d2005 40%, #b87333 70%, #c89b6e 100%); }
+    .preview-corporate { background: linear-gradient(135deg, #0f2040 0%, #1e4fa3 55%, #e8a020 100%); }
+    .preview-warm      { background: linear-gradient(135deg, #faf6f0 0%, #ece4d8 40%, #c4571a 80%, #3d2b1a 100%); }
+    .preview-icon { font-size: 48px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+    .preview-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 10px 16px; backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.45); font-size: 11px;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: rgba(255,255,255,0.75); font-weight: 600;
     }
-    .card-body { padding: 24px 28px 28px; flex: 1; display: flex; flex-direction: column; }
-    .card-tag {
-      display: inline-block; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
-      color: #c9a84c; border: 1px solid #c9a84c; padding: 4px 10px; border-radius: 100px;
-      margin-bottom: 14px; font-weight: 600;
+    .card-body { padding: 22px 24px 26px; flex: 1; display: flex; flex-direction: column; }
+    .card-option {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #c9a84c; font-weight: 700; margin-bottom: 8px;
     }
-    .card-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 900; margin-bottom: 10px; }
-    .card-desc { color: rgba(245,242,238,0.5); font-size: 14px; line-height: 1.65; flex: 1; margin-bottom: 20px; }
+    .card-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 22px; font-weight: 900; margin-bottom: 10px; line-height: 1.1;
+    }
+    .card-desc {
+      color: rgba(245,242,238,0.5); font-size: 13px; line-height: 1.65;
+      flex: 1; margin-bottom: 20px;
+    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
+      background: rgba(255,255,255,0.07); color: rgba(245,242,238,0.6);
+    }
     .card-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #c9a84c; color: #0f0f0f;
-      padding: 12px 24px; border-radius: 6px; font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: #c9a84c; color: #0f0f0f; padding: 12px 20px;
+      border-radius: 8px; font-size: 13px; font-weight: 800;
       letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
-      transition: background 0.2s; align-self: flex-start;
+      transition: background 0.2s;
     }
     .card:hover .card-btn { background: #e0bc6a; }
     .footer-note {
-      margin-top: 48px; color: rgba(245,242,238,0.3);
-      font-size: 12px; text-align: center; letter-spacing: 0.04em;
+      text-align: center; color: rgba(245,242,238,0.25); font-size: 12px;
+      margin-top: 52px; letter-spacing: 0.04em; max-width: 600px;
+      margin-left: auto; margin-right: auto;
     }
-    /* Color swatches as preview */
-    .preview-1 { background: linear-gradient(135deg, #0f2040 0%, #1e4fa3 50%, #e8a020 100%); }
-    .preview-2 { background: linear-gradient(135deg, #0c0c0c 0%, #1c1c1c 50%, #c9a84c 100%); }
-    .preview-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-      padding: 10px 16px; font-size: 12px; letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.7); text-transform: uppercase;
-    }
-    @media (max-width: 640px) {
-      .cards { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 820px) { .cards { grid-template-columns: 1fr; max-width: 480px; } }
   </style>
 </head>
 <body>
-  <p class="eyebrow">Restore & Refinish Furniture Repair · Design Preview</p>
-  <h1>Choose Your Favourite Design</h1>
-  <p class="subtitle">We've prepared two distinct website concepts. Click each to view the full design, then let us know which direction feels right for your brand.</p>
 
-  <div class="cards">
-    <a class="card" href="./design-1-corporate/" target="_blank">
-      <div class="card-preview preview-1">
-        <div class="preview-label">🏢 Light · Navy & Gold · Professional</div>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Option 1</span>
-        <div class="card-title">Clean & Professional</div>
-        <p class="card-desc">A bright, trust-first layout with a quote form in the hero, bold navy & gold branding, review cards, and a clear step-by-step process section. Built to convert visitors into calls.</p>
-        <a class="card-btn" href="./design-1-corporate/" target="_blank">View Design 1 →</a>
-      </div>
-    </a>
-
-    <a class="card" href="./design-2-dark-premium/" target="_blank">
-      <div class="card-preview preview-2">
-        <div class="preview-label">🌑 Dark · Black & Gold · Premium</div>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Option 2</span>
-        <div class="card-title">Dark & Premium</div>
-        <p class="card-desc">A sophisticated dark theme with editorial typography, a gold scrolling ticker, split-screen hero, and refined underline form fields. Feels luxury and high-end.</p>
-        <a class="card-btn" href="./design-2-dark-premium/" target="_blank">View Design 2 →</a>
-      </div>
-    </a>
+  <div class="top">
+    <p class="eyebrow">Restore & Refinish Furniture Repair · Denver, CO</p>
+    <h1>Choose Your Website Design</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Three distinct website concepts, each with a different personality. Click to view the full design and let us know which feels right for your brand.</p>
   </div>
 
-  <p class="footer-note">Both designs are fully responsive and include all sections: Services, Portfolio, About, and Contact.</p>
+  <div class="cards">
+
+    <a class="card" href="../" target="_blank">
+      <div class="preview preview-original">
+        <div class="preview-icon">🪵</div>
+        <div class="preview-bar">🟤 Dark Amber · Craftsman & Rustic</div>
+      </div>
+      <div class="card-body">
+        <div class="card-option">Option 1 — Original</div>
+        <div class="card-title">Craftsman & Rustic</div>
+        <p class="card-desc">A rich, dark amber aesthetic inspired by aged wood and fine craftsmanship. Dramatic hero, scroll animations, and an editorial before/after portfolio grid.</p>
+        <div class="card-tags">
+          <span class="tag">Dark Theme</span>
+          <span class="tag">Amber & Stone</span>
+          <span class="tag">Editorial</span>
+          <span class="tag">Animated</span>
+        </div>
+        <a class="card-btn" href="../" target="_blank">View Design 1 →</a>
+      </div>
+    </a>
+
+    <a class="card" href="./design-1-corporate/" target="_blank">
+      <div class="preview preview-corporate">
+        <div class="preview-icon">🏢</div>
+        <div class="preview-bar">🔵 Navy & Gold · Professional</div>
+      </div>
+      <div class="card-body">
+        <div class="card-option">Option 2 — Corporate</div>
+        <div class="card-title">Clean & Professional</div>
+        <p class="card-desc">A bright, conversion-focused layout with a quote form right in the hero, bold navy & gold branding, customer reviews, and a clear step-by-step process section.</p>
+        <div class="card-tags">
+          <span class="tag">Light Theme</span>
+          <span class="tag">Navy & Gold</span>
+          <span class="tag">High-Converting</span>
+          <span class="tag">Trust-First</span>
+        </div>
+        <a class="card-btn" href="./design-1-corporate/" target="_blank">View Design 2 →</a>
+      </div>
+    </a>
+
+    <a class="card" href="./design-2-warm/" target="_blank">
+      <div class="preview preview-warm">
+        <div class="preview-icon">🪑</div>
+        <div class="preview-bar">🟠 Terracotta & Cream · Warm & Friendly</div>
+      </div>
+      <div class="card-body">
+        <div class="card-option">Option 3 — Warm & Friendly</div>
+        <div class="card-title">Approachable & Inviting</div>
+        <p class="card-desc">An earthy, neighborhood-service feel with terracotta and cream tones, rounded cards, organic background shapes, and a warm, welcoming personality throughout.</p>
+        <div class="card-tags">
+          <span class="tag">Light Theme</span>
+          <span class="tag">Terracotta & Cream</span>
+          <span class="tag">Friendly</span>
+          <span class="tag">Modern</span>
+        </div>
+        <a class="card-btn" href="./design-2-warm/" target="_blank">View Design 3 →</a>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="footer-note">All three designs are fully responsive and include Services, Portfolio, About, and Contact sections with a Netlify-ready quote form.</p>
+
 </body>
 </html>

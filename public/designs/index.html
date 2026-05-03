@@ -31,9 +31,10 @@
     }
     .card {
       background: #191919; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px; overflow: hidden; text-decoration: none; color: inherit;
+      border-radius: 14px; overflow: hidden;
       display: flex; flex-direction: column;
       transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
     .card:hover {
       border-color: #c9a84c; transform: translateY(-5px);
@@ -91,7 +92,7 @@
 <body>
 
   <div class="top">
-    <p class="eyebrow">Restore & Refinish Furniture Repair · Denver, CO</p>
+    <p class="eyebrow">Restore &amp; Refinish Furniture Repair &middot; Denver, CO</p>
     <h1>Choose Your Website Design</h1>
     <div class="divider"></div>
     <p class="subtitle">Three distinct website concepts, each with a different personality. Click to view the full design and let us know which feels right for your brand.</p>
@@ -99,62 +100,62 @@
 
   <div class="cards">
 
-    <a class="card" href="../" target="_blank">
+    <div class="card" onclick="window.open('../', '_blank')">
       <div class="preview preview-original">
-        <div class="preview-icon">🪵</div>
-        <div class="preview-bar">🟤 Dark Amber · Craftsman & Rustic</div>
+        <div class="preview-icon">&#x1FAB5;</div>
+        <div class="preview-bar">&#x1F7E4; Dark Amber &middot; Craftsman &amp; Rustic</div>
       </div>
       <div class="card-body">
-        <div class="card-option">Option 1 — Original</div>
-        <div class="card-title">Craftsman & Rustic</div>
+        <div class="card-option">Option 1 &mdash; Original</div>
+        <div class="card-title">Craftsman &amp; Rustic</div>
         <p class="card-desc">A rich, dark amber aesthetic inspired by aged wood and fine craftsmanship. Dramatic hero, scroll animations, and an editorial before/after portfolio grid.</p>
         <div class="card-tags">
           <span class="tag">Dark Theme</span>
-          <span class="tag">Amber & Stone</span>
+          <span class="tag">Amber &amp; Stone</span>
           <span class="tag">Editorial</span>
           <span class="tag">Animated</span>
         </div>
-        <a class="card-btn" href="../" target="_blank">View Design 1 →</a>
+        <a class="card-btn" href="../" target="_blank">View Design 1 &rarr;</a>
       </div>
-    </a>
+    </div>
 
-    <a class="card" href="./design-1-corporate/" target="_blank">
+    <div class="card" onclick="window.open('./design-1-corporate/', '_blank')">
       <div class="preview preview-corporate">
-        <div class="preview-icon">🏢</div>
-        <div class="preview-bar">🔵 Navy & Gold · Professional</div>
+        <div class="preview-icon">&#x1F3E2;</div>
+        <div class="preview-bar">&#x1F535; Navy &amp; Gold &middot; Professional</div>
       </div>
       <div class="card-body">
-        <div class="card-option">Option 2 — Corporate</div>
-        <div class="card-title">Clean & Professional</div>
-        <p class="card-desc">A bright, conversion-focused layout with a quote form right in the hero, bold navy & gold branding, customer reviews, and a clear step-by-step process section.</p>
+        <div class="card-option">Option 2 &mdash; Corporate</div>
+        <div class="card-title">Clean &amp; Professional</div>
+        <p class="card-desc">A bright, conversion-focused layout with a quote form right in the hero, bold navy &amp; gold branding, customer reviews, and a clear step-by-step process section.</p>
         <div class="card-tags">
           <span class="tag">Light Theme</span>
-          <span class="tag">Navy & Gold</span>
+          <span class="tag">Navy &amp; Gold</span>
           <span class="tag">High-Converting</span>
           <span class="tag">Trust-First</span>
         </div>
-        <a class="card-btn" href="./design-1-corporate/" target="_blank">View Design 2 →</a>
+        <a class="card-btn" href="./design-1-corporate/" target="_blank">View Design 2 &rarr;</a>
       </div>
-    </a>
+    </div>
 
-    <a class="card" href="./design-2-warm/" target="_blank">
+    <div class="card" onclick="window.open('./design-2-warm/', '_blank')">
       <div class="preview preview-warm">
-        <div class="preview-icon">🪑</div>
-        <div class="preview-bar">🟠 Terracotta & Cream · Warm & Friendly</div>
+        <div class="preview-icon">&#x1FA91;</div>
+        <div class="preview-bar">&#x1F7E0; Terracotta &amp; Cream &middot; Warm &amp; Friendly</div>
       </div>
       <div class="card-body">
-        <div class="card-option">Option 3 — Warm & Friendly</div>
-        <div class="card-title">Approachable & Inviting</div>
-        <p class="card-desc">An earthy, neighborhood-service feel with terracotta and cream tones, rounded cards, organic background shapes, and a warm, welcoming personality throughout.</p>
+        <div class="card-option">Option 3 &mdash; Warm &amp; Friendly</div>
+        <div class="card-title">Approachable &amp; Inviting</div>
+        <p class="card-desc">An earthy, neighborhood-service feel with terracotta and cream tones, rounded cards, organic background shapes, and a warm welcoming personality throughout.</p>
         <div class="card-tags">
           <span class="tag">Light Theme</span>
-          <span class="tag">Terracotta & Cream</span>
+          <span class="tag">Terracotta &amp; Cream</span>
           <span class="tag">Friendly</span>
           <span class="tag">Modern</span>
         </div>
-        <a class="card-btn" href="./design-2-warm/" target="_blank">View Design 3 →</a>
+        <a class="card-btn" href="./design-2-warm/" target="_blank">View Design 3 &rarr;</a>
       </div>
-    </a>
+    </div>
 
   </div>
 
