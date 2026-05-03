@@ -404,84 +404,139 @@ function Portfolio() {
 
 // ─── About ────────────────────────────────────────────────────────────────────
 
+const OWNERS = [
+  {
+    name: "Brandon Maestas",
+    role: "Co-Owner & Lead Restorer",
+    years: "20+",
+    specialty: "Wood Restoration & Structural Repair",
+    img: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=85",
+    bio: "Brandon has been repairing furniture since he was a teenager working summers in his uncle's shop. Over 20 years later, he's seen just about every kind of damage imaginable — and fixed it. His specialty is structural repair and wood restoration, from hairline scratches to full refinishes.",
+    tags: ["Wood Repair", "Antique Restoration", "Refinishing"],
+  },
+  {
+    name: "Carla Vega",
+    role: "Co-Owner & Upholstery Specialist",
+    years: "15+",
+    specialty: "Upholstery, Leather & Fabric",
+    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=85",
+    bio: "Carla brings 15 years of upholstery and soft-furnishing expertise to the team. Whether it's a torn leather sofa, a beloved armchair in need of new fabric, or foam replacement, Carla handles every project with an eye for detail and a commitment to quality that keeps clients coming back.",
+    tags: ["Upholstery", "Leather Repair", "Fabric & Foam"],
+  },
+];
+
 function About() {
-  const [ref, visible] = useScrollReveal();
+  const [ref, visible] = useScrollReveal(0.05);
 
   return (
     <section id="about" className="bg-amber-950 py-24 md:py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div
-          ref={ref}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
-        >
-          {/* Image */}
-          <div
-            className="relative"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateX(-32px)",
-              transition: "opacity 0.8s ease, transform 0.8s ease",
-            }}
-          >
-            <div className="absolute -inset-4 border border-amber-700/30 rounded-sm -rotate-2" />
-            <img
-              src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=85"
-              alt="Brandon Maestas at work"
-              className="relative w-full aspect-[4/5] object-cover object-center rounded-sm"
-            />
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -right-6 bg-amber-600 text-stone-950 p-5 rounded-sm shadow-xl">
-              <div className="font-display text-3xl leading-none">20</div>
-              <div className="text-[10px] uppercase tracking-widest font-bold mt-1">Years<br/>Expert</div>
-            </div>
-          </div>
 
-          {/* Text */}
-          <div
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateX(32px)",
-              transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
-            }}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-8 bg-amber-500" />
-              <span className="text-amber-500 text-xs uppercase tracking-[0.25em] font-semibold">Meet the Owner</span>
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl text-amber-50 leading-tight mb-8">
-              Brandon Maestas,<br />
-              <span className="text-amber-400">20+ Years</span><br />
-              Furniture Repair Pro
+        {/* Section header */}
+        <div
+          className="mb-16 md:mb-20"
+          style={{
+            opacity: visible ? 1 : 0,
+            transform: visible ? "none" : "translateY(20px)",
+            transition: "opacity 0.7s ease, transform 0.7s ease",
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-500" />
+            <span className="text-amber-500 text-xs uppercase tracking-[0.25em] font-semibold">Meet the Owners</span>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <h2 className="font-display text-4xl md:text-5xl text-amber-50 leading-tight max-w-lg">
+              The People Behind<br />
+              <span className="text-amber-400">Every Repair</span>
             </h2>
-            <div className="space-y-5 text-amber-100/70 leading-relaxed">
-              <p>
-                I've been repairing furniture since I was a teenager working summers in my uncle's shop.
-                Over 20 years later, I've seen just about every kind of damage imaginable — and fixed it.
-                Wood, metal, upholstery, leather, laminate — if it's furniture, I can bring it back.
-              </p>
-              <p>
-                At Restore & Refinish Furniture Repair, we believe every piece of furniture has a story worth
-                preserving. Whether it's a dining set that's hosted decades of family dinners, or a
-                sofa you just can't part with, our job is to make it look and feel like new.
-              </p>
-              <p>
-                We serve the entire Denver metro, including Boulder, Aurora, Lakewood, and Highlands Ranch.
-                Every quote is free, every repair is guaranteed, and every client is treated like a neighbor.
-              </p>
-            </div>
-            <div className="mt-10 flex items-center gap-6">
-              <a
-                href="#contact"
-                className="px-7 py-3.5 bg-amber-500 text-stone-950 font-bold uppercase tracking-widest text-xs rounded hover:bg-amber-400 transition-colors"
-              >
-                Work With Us
-              </a>
-              <div className="text-amber-600 text-sm font-medium">
-                📞 (720) 555-0192
-              </div>
-            </div>
+            <p className="text-amber-100/60 max-w-sm text-sm leading-relaxed md:text-right">
+              Restore & Refinish is a family-run Denver business. When you work with us, you're working directly with Brandon and Carla — not a franchise or a call center.
+            </p>
           </div>
         </div>
+
+        {/* Owner cards */}
+        <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {OWNERS.map((owner, i) => (
+            <div
+              key={owner.name}
+              className="group bg-amber-900/40 border border-amber-800/50 rounded-sm overflow-hidden hover:border-amber-600/70 transition-colors duration-500"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "none" : "translateY(32px)",
+                transition: `opacity 0.8s ease ${i * 150}ms, transform 0.8s ease ${i * 150}ms, border-color 0.5s`,
+              }}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2">
+                {/* Photo */}
+                <div className="relative overflow-hidden">
+                  <img
+                    src={owner.img}
+                    alt={owner.name}
+                    className="w-full h-72 sm:h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {/* Years badge */}
+                  <div className="absolute top-4 left-4 bg-amber-600 text-stone-950 px-3 py-2 rounded-sm text-center shadow-lg">
+                    <div className="font-display text-2xl leading-none font-bold">{owner.years}</div>
+                    <div className="text-[9px] uppercase tracking-widest font-bold mt-0.5">Yrs</div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-7 flex flex-col justify-between">
+                  <div>
+                    <div className="text-amber-500 text-[10px] uppercase tracking-[0.2em] font-semibold mb-2">
+                      {owner.role}
+                    </div>
+                    <h3 className="font-display text-2xl text-amber-50 mb-1 leading-snug">
+                      {owner.name}
+                    </h3>
+                    <div className="text-amber-600 text-xs font-medium mb-5 flex items-center gap-2">
+                      <span className="w-4 h-px bg-amber-600/50 inline-block" />
+                      {owner.specialty}
+                    </div>
+                    <p className="text-amber-100/60 text-sm leading-relaxed">
+                      {owner.bio}
+                    </p>
+                  </div>
+
+                  {/* Specialty tags */}
+                  <div className="flex flex-wrap gap-2 mt-6">
+                    {owner.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 border border-amber-700/50 text-amber-500/80 rounded-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA strip */}
+        <div
+          className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-amber-800/40 pt-10"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "opacity 0.8s ease 0.4s",
+          }}
+        >
+          <p className="text-amber-100/50 text-sm max-w-md">
+            Together, Brandon and Carla cover every type of furniture repair — from structural wood work to upholstery and leather. One shop, two specialists, zero compromises.
+          </p>
+          <a
+            href="#contact"
+            className="flex-shrink-0 px-7 py-3.5 bg-amber-500 text-stone-950 font-bold uppercase tracking-widest text-xs rounded hover:bg-amber-400 transition-colors"
+          >
+            Work With Us →
+          </a>
+        </div>
+
       </div>
     </section>
   );
