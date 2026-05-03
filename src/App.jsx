@@ -117,8 +117,8 @@ function Navbar() {
             M
           </div>
           <div className="leading-tight">
-            <div className="font-display text-amber-50 text-lg tracking-wide">Maestas Furniture</div>
-            <div className="text-amber-600 text-[10px] uppercase tracking-[0.2em] font-medium">Repair & Restoration · Denver</div>
+            <div className="font-display text-amber-50 text-lg tracking-wide">Restore & Refinish</div>
+            <div className="text-amber-600 text-[10px] uppercase tracking-[0.2em] font-medium">Furniture Repair · Denver</div>
           </div>
         </a>
 
@@ -460,7 +460,7 @@ function About() {
                 Wood, metal, upholstery, leather, laminate — if it's furniture, I can bring it back.
               </p>
               <p>
-                At Maestas Furniture Repair, we believe every piece of furniture has a story worth
+                At Restore & Refinish Furniture Repair, we believe every piece of furniture has a story worth
                 preserving. Whether it's a dining set that's hosted decades of family dinners, or a
                 sofa you just can't part with, our job is to make it look and feel like new.
               </p>
@@ -540,7 +540,7 @@ function Contact() {
               {[
                 ["📍", "Service Area", "Denver Metro · Boulder · Aurora\nLakewood · Highlands Ranch"],
                 ["📞", "Phone", "(720) 555-0192"],
-                ["📧", "Email", "hello@maestasfurniture.com"],
+                ["📧", "Email", "hello@restoreandrefinish.com"],
                 ["🕐", "Hours", "Mon–Fri: 8am–6pm\nSat: 9am–3pm"],
               ].map(([icon, label, value]) => (
                 <div key={label} className="flex gap-4">
@@ -573,7 +573,7 @@ function Contact() {
               </div>
             ) : (
               <form
-                name="thornton-quote"
+                name="restore-refinish-quote"
                 method="POST"
                 data-netlify="true"
                 encType="multipart/form-data"
@@ -581,7 +581,7 @@ function Contact() {
                 className="bg-white border border-stone-200 rounded-sm p-8 md:p-10 shadow-sm"
               >
                 {/* Netlify hidden field */}
-                <input type="hidden" name="form-name" value="thornton-quote" />
+                <input type="hidden" name="form-name" value="restore-refinish-quote" />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                   {/* Name */}
@@ -697,8 +697,8 @@ function Footer() {
   return (
     <footer className="bg-stone-950 border-t border-stone-800 py-10">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
-        <div className="font-display text-stone-400 text-base">Maestas Furniture Repair</div>
-        <p>© {new Date().getFullYear()} Maestas Furniture Repair LLC · Denver, CO · All rights reserved.</p>
+        <div className="font-display text-stone-400 text-base">Restore & Refinish Furniture Repair</div>
+        <p>© {new Date().getFullYear()} Restore & Refinish Furniture Repair LLC · Denver, CO · All rights reserved.</p>
         <p>Built with ♥ and sawdust</p>
       </div>
     </footer>
