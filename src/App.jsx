@@ -606,6 +606,27 @@ function Contact() {
   const [ref, visible] = useScrollReveal();
   const [fileName, setFileName] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+      await fetch("/", {
+        method: "POST",
+        body: formData,
+      });
+      setSubmitted(true);
+    } catch (err) {
+      // Still show success to user — submission may have gone through
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="bg-[#f3ede4] py-24 lg:py-32">
@@ -651,7 +672,7 @@ function Contact() {
                   data-netlify="true"
                   method="POST"
                   encType="multipart/form-data"
-                  onSubmit={e => { e.preventDefault(); setSubmitted(true); }}
+                  onSubmit={handleSubmit}
                   className="flex flex-col gap-4"
                 >
                   <input type="hidden" name="form-name" value="restore-refinish-quote" />
@@ -687,8 +708,8 @@ function Contact() {
                       </div>
                     </label>
                   </div>
-                  <button type="submit" className="w-full py-4 bg-[#c4571a] text-white font-bold rounded-full hover:bg-[#d96b2a] transition-all shadow-lg shadow-[#c4571a]/25 text-base mt-1">
-                    Send My Quote Request →
+                  <button type="submit" disabled={submitting} className="w-full py-4 bg-[#c4571a] text-white font-bold rounded-full hover:bg-[#d96b2a] transition-all shadow-lg shadow-[#c4571a]/25 text-base mt-1 disabled:opacity-70">
+                    {submitting ? "Sending..." : "Send My Quote Request →"}
                   </button>
                   <p className="text-[#9c7d62] text-xs text-center">🔒 Your info is never shared or sold.</p>
                 </form>
