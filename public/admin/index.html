@@ -4,10 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio Admin | Restore & Refinish</title>
-  <!-- Netlify CMS -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 </head>
 <body>
-  <!-- Netlify CMS mounts itself here automatically -->
+  <div id="nc-root"></div>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js';
+      document.body.appendChild(script);
+    });
+  </script>
 </body>
 </html>
