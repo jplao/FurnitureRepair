@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Netlify CMS Configuration
+# Restore & Refinish Furniture Repair
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: git-gateway
+  branch: main   # The branch your site deploys from
+
+# Where uploaded images get stored in the repo
+media_folder: "public/uploads"
+
+# The public URL path to those images
+public_folder: "/uploads"
+
+# ─── Collections ──────────────────────────────────────────────────────────────
+collections:
+
+  # ── Portfolio ──────────────────────────────────────────────────────────────
+  - name: "portfolio"
+    label: "Portfolio"
+    label_singular: "Portfolio Item"
+    description: "Add, edit, or remove Before & After project photos shown on the website."
+    folder: "public/portfolio"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    identifier_field: "label"
+    summary: "{{label}} — {{detail}}"
+    fields:
+      - label: "Project Title"
+        name: "label"
+        widget: "string"
+        hint: "e.g. Victorian Parlour Chair, Farmhouse Dining Table"
+
+      - label: "Work Description"
+        name: "detail"
+        widget: "string"
+        hint: "Brief summary of repairs done, e.g. Reglued joints · Finish restored"
+
+      - label: "Before Photo"
+        name: "before"
+        widget: "image"
+        hint: "Upload a clear photo of the furniture BEFORE repair."
+
+      - label: "After Photo"
+        name: "after"
+        widget: "image"
+        hint: "Upload a clear photo of the furniture AFTER repair."
+
+      - label: "Wide Card (spans 2 columns on desktop)"
+        name: "wide"
+        widget: "boolean"
+        default: false
+        hint: "Turn on to make this card wider in the portfolio grid. Alternate wide and narrow cards for best visual results."
+
+      - label: "Display Order"
+        name: "order"
+        widget: "number"
+        default: 99
+        value_type: "int"
+        hint: "Lower numbers appear first. Use 1, 2, 3... to control the order."
