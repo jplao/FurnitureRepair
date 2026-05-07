@@ -17,14 +17,14 @@ const PORTFOLIO = [
 ];
 
 const REVIEWS = [
-  { id: 1, initial: "S", name: "Sarah M.", loc: "Cherry Creek, Denver", text: "Brandon restored my grandmother's dining set. I cried when I saw it. Absolutely incredible work and so reasonably priced." },
+  { id: 1, initial: "S", name: "Sarah M.", loc: "Cherry Creek, Denver", text: "They restored my grandmother's dining set. I cried when I saw it. Absolutely incredible work and so reasonably priced." },
   { id: 2, initial: "T", name: "Tom R.", loc: "Highlands Ranch", text: "They came right to my home and fixed my dining table in a few hours. No hassle, no hauling — just great results." },
   { id: 3, initial: "L", name: "Lisa K.", loc: "Lakewood", text: "Honest pricing, fast turnaround, exceptional results. I'm now having them restore our entire bedroom set. Brandon and Carla are the real deal." },
 ];
 
 const STEPS = [
   { num: "01", title: "Share Your Photos", desc: "Fill out our quick form and upload a photo of the damage. Takes under 2 minutes." },
-  { num: "02", title: "Get a Free Estimate", desc: "Brandon personally reviews every job and sends an honest, no-obligation quote within 24 hours." },
+  { num: "02", title: "Get a Free Estimate", desc: "We personally review every job and send an honest, no-obligation quote within 24 hours." },
   { num: "03", title: "We Come to You", desc: "All work is done right in your home — no hauling heavy furniture. We bring the tools and expertise to you." },
   { num: "04", title: "Enjoy the Results", desc: "We clean up, you enjoy the transformation. 100% satisfaction guaranteed, every single time." },
 ];
@@ -375,7 +375,7 @@ function Contact() {
             <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight mb-6">
               Get Your Free<br /><span className="text-[#c4571a]">Estimate Today</span>
             </h2>
-            <p className="text-[#6b4e35] text-base leading-relaxed mb-10">Describe your piece, upload a photo, and Brandon will personally respond with a no-obligation quote within one business day.</p>
+            <p className="text-[#6b4e35] text-base leading-relaxed mb-10">Describe your piece, upload a photo, and we'll personally respond with a no-obligation quote within one business day.</p>
             <div className="flex flex-col gap-4">
               {[
                 ["📞", "Phone", "(720) 555-0192"],
@@ -399,7 +399,7 @@ function Contact() {
               <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-[#ece4d8]">
                 <div className="text-5xl mb-5">🎉</div>
                 <h3 className="font-display text-2xl text-[#3d2b1a] mb-3">Quote Request Sent!</h3>
-                <p className="text-[#6b4e35] text-sm">Thank you! Brandon will personally review your project and respond within one business day.</p>
+                <p className="text-[#6b4e35] text-sm">Thank you! We'll personally review your project and respond within one business day.</p>
               </div>
             ) : (
               <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-sm border border-[#ece4d8]">
