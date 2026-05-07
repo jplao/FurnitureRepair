@@ -6,6 +6,8 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
+
+  # ── Portfolio ──────────────────────────────────────────────────────────────
   - name: "portfolio"
     label: "Portfolio"
     label_singular: "Portfolio Item"
@@ -50,3 +52,45 @@ collections:
         default: 99
         value_type: "int"
         hint: "Lower numbers appear first. Use 1, 2, 3... to control the order."
+
+  # ── Reviews ────────────────────────────────────────────────────────────────
+  - name: "reviews"
+    label: "Reviews"
+    label_singular: "Review"
+    description: "Add, edit, or remove customer reviews shown on the website."
+    folder: "public/reviews"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    identifier_field: "name"
+    summary: "{{name}} — {{location}}"
+    fields:
+      - label: "Customer Name"
+        name: "name"
+        widget: "string"
+        hint: "e.g. Sarah M."
+
+      - label: "Location"
+        name: "location"
+        widget: "string"
+        hint: "e.g. Cherry Creek, Denver"
+
+      - label: "Review Text"
+        name: "text"
+        widget: "text"
+        hint: "The customer's review. Keep it authentic and concise."
+
+      - label: "Star Rating"
+        name: "rating"
+        widget: "select"
+        options: ["5", "4", "3"]
+        default: "5"
+        hint: "Number of stars (we recommend only showing 4-5 star reviews)"
+
+      - label: "Display Order"
+        name: "order"
+        widget: "number"
+        default: 99
+        value_type: "int"
+        hint: "Lower numbers appear first."

@@ -18,10 +18,10 @@ const PORTFOLIO_FILES = [
   "antique-secretary-desk",
 ];
 
-const REVIEWS = [
-  { id: 1, initial: "S", name: "Sarah M.", loc: "Cherry Creek, Denver", text: "They restored my grandmother's dining set. I cried when I saw it. Absolutely incredible work and so reasonably priced." },
-  { id: 2, initial: "T", name: "Tom R.", loc: "Highlands Ranch", text: "They came right to my home and fixed my dining table in a few hours. No hassle, no hauling — just great results." },
-  { id: 3, initial: "L", name: "Lisa K.", loc: "Lakewood", text: "Honest pricing, fast turnaround, exceptional results. I'm now having them restore our entire bedroom set. Brandon and Carla are the real deal." },
+const REVIEWS_FILES = [
+  "sarah-m",
+  "tom-r",
+  "lisa-k",
 ];
 
 const STEPS = [
@@ -119,6 +119,44 @@ function usePortfolio() {
   }, []);
 
   return { items, loading };
+}
+
+// ─── Hook: load reviews from CMS JSON files ───────────────────────────────────
+
+function useReviews() {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        let filenames = REVIEWS_FILES;
+        try {
+          const res = await fetch("/reviews-index.json");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.items && data.items.length > 0) filenames = data.items;
+          }
+        } catch {}
+
+        const results = await Promise.all(
+          filenames.map(name =>
+            fetch(`/reviews/${name}.json`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          )
+        );
+        setReviews(results.filter(Boolean).sort((a, b) => (a.order ?? 99) - (b.order ?? 99)));
+      } catch {
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  return { reviews, loading };
 }
 
 // ─── Tag ──────────────────────────────────────────────────────────────────────
@@ -459,7 +497,10 @@ function Portfolio() {
 // ─── Reviews ──────────────────────────────────────────────────────────────────
 
 function Reviews() {
-  const [ref, visible] = useScrollReveal();
+  const { reviews, loading } = useReviews();
+
+  const starString = (rating) => "★".repeat(parseInt(rating || 5));
+
   return (
     <section className="bg-[#f3ede4] py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -467,25 +508,39 @@ function Reviews() {
           <SectionTag label="Customer Reviews" />
           <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">What Denver<br />Homeowners Say</h2>
         </div>
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {REVIEWS.map((r, i) => (
-            <div
-              key={r.id}
-              className="bg-white rounded-2xl p-7 border border-[#ece4d8] shadow-sm hover:shadow-lg transition-all duration-300"
-              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: `opacity 0.6s ease ${i * 120}ms, transform 0.6s ease ${i * 120}ms` }}
-            >
-              <div className="text-[#c4571a] text-base tracking-[2px] mb-4">★★★★★</div>
-              <p className="font-display italic text-base text-[#3d2b1a] leading-[1.65] mb-6">"{r.text}"</p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[#ece4d8]">
-                <div className="w-10 h-10 rounded-full bg-[#c4571a]/10 text-[#c4571a] flex items-center justify-center font-display text-lg font-bold flex-shrink-0">{r.initial}</div>
-                <div>
-                  <div className="text-sm font-bold text-[#3d2b1a]">{r.name}</div>
-                  <div className="text-xs text-[#9c7d62] mt-0.5">{r.loc}</div>
+
+        {/* Loading skeleton */}
+        {loading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-white rounded-2xl p-7 border border-[#ece4d8] animate-pulse h-48" />
+            ))}
+          </div>
+        )}
+
+        {/* Reviews grid */}
+        {!loading && reviews.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {reviews.map((r) => (
+              <div
+                key={r.name}
+                className="bg-white rounded-2xl p-7 border border-[#ece4d8] shadow-sm hover:shadow-lg transition-all duration-300"
+              >
+                <div className="text-[#c4571a] text-base tracking-[2px] mb-4">{starString(r.rating)}</div>
+                <p className="font-display italic text-base text-[#3d2b1a] leading-[1.65] mb-6">"{r.text}"</p>
+                <div className="flex items-center gap-3 pt-4 border-t border-[#ece4d8]">
+                  <div className="w-10 h-10 rounded-full bg-[#c4571a]/10 text-[#c4571a] flex items-center justify-center font-display text-lg font-bold flex-shrink-0">
+                    {r.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-[#3d2b1a]">{r.name}</div>
+                    <div className="text-xs text-[#9c7d62] mt-0.5">{r.location}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
