@@ -1,36 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-stone-950 text-stone-800;
-  }
-}
-
-@layer utilities {
-  .animation-delay-200 {
-    animation-delay: 200ms;
-    animation-fill-mode: both;
-  }
-  .animation-delay-400 {
-    animation-delay: 400ms;
-    animation-fill-mode: both;
-  }
-  .animation-delay-600 {
-    animation-delay: 600ms;
-    animation-fill-mode: both;
-  }
-
-  /* Ensure animated elements start hidden */
-  .animate-slide-up,
-  .animate-fade-in {
-    animation-fill-mode: both;
-  }
+  html { scroll-behavior: smooth; }
+  body { background: #faf6f0; overflow-x: hidden; }
 }

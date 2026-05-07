@@ -1,87 +1,61 @@
 import { useState, useEffect, useRef } from "react";
 
-// ─── Dummy Data ────────────────────────────────────────────────────────────────
+// ─── Data ──────────────────────────────────────────────────────────────────────
 
 const SERVICES = [
-  {
-    id: 1,
-    icon: "🪚",
-    title: "Scratch & Dent Repair",
-    desc: "From hairline scratches to deep gouges, we blend repairs invisibly using hand-mixed stains matched to your piece's original finish.",
-  },
-  {
-    id: 2,
-    icon: "🏺",
-    title: "Antique Restoration",
-    desc: "Heirloom pieces demand reverence. We use period-appropriate techniques and materials to honor the original craftsman's intent.",
-  },
-  {
-    id: 3,
-    icon: "🔩",
-    title: "Joint Regluing & Structural Repair",
-    desc: "Wobbly chairs and loose table legs get full disassembly, old glue removal, and precision regluing for a lifetime of renewed stability.",
-  },
-  {
-    id: 4,
-    icon: "✨",
-    title: "Refinishing & French Polish",
-    desc: "Strip back decades of grime and old varnish, then apply a hand-rubbed oil, lacquer, or shellac finish tailored to your taste.",
-  },
+  { id: 1, emoji: "🪚", title: "Scratch & Dent Repair", desc: "Invisible blending using hand-mixed stains matched exactly to your piece's original finish. No patches, no traces." },
+  { id: 2, emoji: "🏺", title: "Antique Restoration", desc: "We treat every heirloom with reverence — using period-appropriate techniques that preserve character and value." },
+  { id: 3, emoji: "🔩", title: "Structural Repair", desc: "Full disassembly, old glue removal, and precision regluing. Wobbly chairs and loose legs won't last long with us." },
+  { id: 4, emoji: "✨", title: "Refinishing & Polishing", desc: "Strip decades of wear and apply a hand-rubbed oil, lacquer, or shellac finish perfectly suited to your piece." },
 ];
 
 const PORTFOLIO = [
+  { id: 1, label: "Victorian Parlour Chair", detail: "Reglued joints · Finish restored", before: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80", after: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80", wide: true },
+  { id: 2, label: "Mid-Century Credenza", detail: "Deep scratch repair · Tung oil refinish", before: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80", after: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600&q=80", wide: false },
+  { id: 3, label: "Farmhouse Dining Table", detail: "Water ring removal · Full refinish", before: "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=600&q=80", after: "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80", wide: false },
+  { id: 4, label: "Antique Secretary Desk", detail: "Veneer rebonded · Shellac polish", before: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&q=80", after: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80", wide: true },
+];
+
+const REVIEWS = [
+  { id: 1, initial: "S", name: "Sarah M.", loc: "Cherry Creek, Denver", text: "Brandon restored my grandmother's dining set. I cried when I saw it. Absolutely incredible work and so reasonably priced." },
+  { id: 2, initial: "T", name: "Tom R.", loc: "Highlands Ranch", text: "They came right to my home and fixed my dining table in a few hours. No hassle, no hauling — just great results." },
+  { id: 3, initial: "L", name: "Lisa K.", loc: "Lakewood", text: "Honest pricing, fast turnaround, exceptional results. I'm now having them restore our entire bedroom set. Brandon and Carla are the real deal." },
+];
+
+const STEPS = [
+  { num: "01", title: "Share Your Photos", desc: "Fill out our quick form and upload a photo of the damage. Takes under 2 minutes." },
+  { num: "02", title: "Get a Free Estimate", desc: "Brandon personally reviews every job and sends an honest, no-obligation quote within 24 hours." },
+  { num: "03", title: "We Come to You", desc: "All work is done right in your home — no hauling heavy furniture. We bring the tools and expertise to you." },
+  { num: "04", title: "Enjoy the Results", desc: "We clean up, you enjoy the transformation. 100% satisfaction guaranteed, every single time." },
+];
+
+const OWNERS = [
   {
-    id: 1,
-    label: "Victorian Parlour Chair",
-    detail: "Reglued joints · Fabric replaced · Finish restored",
-    before: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80",
+    name: "Brandon Maestas",
+    role: "Co-Owner & Lead Restorer",
+    years: "20+",
+    img: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=700&q=85",
+    bio: "Brandon has been repairing furniture since he was a teenager working summers in his uncle's shop. Over 20 years later, he specializes in structural repair and wood restoration — from hairline scratches to full refinishes.",
+    tags: ["Wood Repair", "Antique Restoration", "Refinishing"],
   },
   {
-    id: 2,
-    label: "Mid-Century Walnut Credenza",
-    detail: "Deep scratch repair · Tung oil refinish",
-    before: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600&q=80",
-  },
-  {
-    id: 3,
-    label: "Farmhouse Dining Table",
-    detail: "Water ring removal · Full refinish · Leg stabilization",
-    before: "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80",
-  },
-  {
-    id: 4,
-    label: "Antique Secretary Desk",
-    detail: "Veneer rebonded · Hardware replaced · Shellac polish",
-    before: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80",
-  },
-  {
-    id: 5,
-    label: "Rocking Chair — 1890s Oak",
-    detail: "Broken spindle replaced · Strip & restain",
-    before: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1551298370-9d3d53740c72?w=600&q=80",
-  },
-  {
-    id: 6,
-    label: "Arts & Crafts Bookcase",
-    detail: "Mortise joint repair · Linseed oil finish",
-    before: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-    after: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80",
+    name: "Carla Vega",
+    role: "Co-Owner & Client Relations",
+    years: "15+",
+    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=85",
+    bio: "Carla manages every client relationship from first quote to final reveal. With a background in antique restoration and fine finishing, her eye for detail and passion for quality keeps clients coming back.",
+    tags: ["Antique Restoration", "Fine Finishing", "Client Relations"],
   },
 ];
 
-// ─── Utility ───────────────────────────────────────────────────────────────────
+// ─── Hook ─────────────────────────────────────────────────────────────────────
 
-function useScrollReveal(threshold = 0.15) {
+function useScrollReveal(threshold = 0.12) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold }
     );
     if (ref.current) obs.observe(ref.current);
@@ -90,185 +64,104 @@ function useScrollReveal(threshold = 0.15) {
   return [ref, visible];
 }
 
-// ─── Nav ───────────────────────────────────────────────────────────────────────
+// ─── Tag ──────────────────────────────────────────────────────────────────────
+
+function SectionTag({ label }) {
+  return (
+    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#c4571a] mb-4">
+      <span className="w-5 h-0.5 bg-[#c4571a] rounded inline-block" />
+      {label}
+    </div>
+  );
+}
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
   }, []);
-
   const links = ["Services", "Portfolio", "About", "Contact"];
-
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-stone-950/95 backdrop-blur-sm shadow-lg shadow-black/30" : "bg-transparent"
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#faf6f0]/97 backdrop-blur-md shadow-sm" : "bg-transparent"}`}>
+      <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-[76px] flex items-center justify-between">
         <a href="#hero" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center text-stone-950 font-black text-lg leading-none group-hover:bg-amber-500 transition-colors">
-            M
-          </div>
-          <div className="leading-tight">
-            <div className="font-display text-amber-50 text-lg tracking-wide">Restore & Refinish</div>
-            <div className="text-amber-600 text-[10px] uppercase tracking-[0.2em] font-medium">Furniture Repair · Denver</div>
+          <div className="w-11 h-11 bg-[#c4571a] rounded-xl flex items-center justify-center text-2xl shadow-md shadow-[#c4571a]/30 group-hover:bg-[#d96b2a] transition-colors">🪑</div>
+          <div>
+            <div className="font-display text-[17px] font-bold text-[#3d2b1a] leading-tight">Restore & Refinish</div>
+            <div className="text-[11px] text-[#9c7d62] font-medium">Furniture Repair · Denver, CO</div>
           </div>
         </a>
-
-        {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
-            <li key={l}>
-              <a
-                href={`#${l.toLowerCase()}`}
-                className="text-stone-300 text-sm uppercase tracking-widest hover:text-amber-400 transition-colors duration-300 font-medium"
-              >
-                {l}
-              </a>
-            </li>
+        <ul className="hidden md:flex items-center gap-7">
+          {links.map(l => (
+            <li key={l}><a href={`#${l.toLowerCase()}`} className="text-[#6b4e35] text-sm font-medium hover:text-[#c4571a] transition-colors">{l}</a></li>
           ))}
-          <li>
-            <a
-              href="#contact"
-              className="ml-2 px-5 py-2.5 bg-amber-600 text-stone-950 text-sm font-bold uppercase tracking-widest rounded hover:bg-amber-500 transition-colors"
-            >
-              Free Quote
-            </a>
-          </li>
+          <li><a href="#contact" className="px-5 py-2.5 bg-[#c4571a] text-white text-sm font-bold rounded-full hover:bg-[#d96b2a] transition-all shadow-md shadow-[#c4571a]/30 hover:-translate-y-0.5 inline-block">Free Quote</a></li>
         </ul>
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden text-amber-50 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          <div className={`w-6 h-0.5 bg-current mb-1.5 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <div className={`w-6 h-0.5 bg-current mb-1.5 transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <div className={`w-6 h-0.5 bg-current transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        <button className="md:hidden p-2 text-[#3d2b1a]" onClick={() => setOpen(!open)}>
+          <div className={`w-6 h-0.5 bg-current mb-1.5 transition-all ${open ? "rotate-45 translate-y-2" : ""}`} />
+          <div className={`w-6 h-0.5 bg-current mb-1.5 transition-all ${open ? "opacity-0" : ""}`} />
+          <div className={`w-6 h-0.5 bg-current transition-all ${open ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </nav>
-
-      {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-64" : "max-h-0"}`}>
-        <div className="bg-stone-950/98 border-t border-stone-800 px-6 py-4 flex flex-col gap-4">
-          {links.map((l) => (
-            <a
-              key={l}
-              href={`#${l.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              className="text-stone-300 uppercase tracking-widest text-sm hover:text-amber-400 transition-colors"
-            >
-              {l}
-            </a>
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? "max-h-72" : "max-h-0"}`}>
+        <div className="bg-[#faf6f0] border-t border-[#ece4d8] px-6 py-5 flex flex-col gap-4">
+          {links.map(l => (
+            <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} className="text-[#6b4e35] font-medium hover:text-[#c4571a] transition-colors">{l}</a>
           ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="px-5 py-2.5 bg-amber-600 text-stone-950 text-sm font-bold uppercase tracking-widest rounded text-center hover:bg-amber-500 transition-colors"
-          >
-            Free Quote
-          </a>
+          <a href="#contact" onClick={() => setOpen(false)} className="px-5 py-2.5 bg-[#c4571a] text-white text-sm font-bold rounded-full text-center">Free Quote</a>
         </div>
       </div>
     </header>
   );
 }
 
-// ─── Hero ──────────────────────────────────────────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=1800&q=85"
-          alt="Workshop"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-stone-950/90 via-stone-900/75 to-amber-950/60" />
-        {/* Grain texture overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
-
-      {/* Decorative rule */}
-      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-1 h-48 bg-gradient-to-b from-transparent via-amber-600 to-transparent opacity-60" />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        {/* Eyebrow */}
-        <div className="inline-flex items-center gap-3 mb-8 animate-fade-in">
-          <div className="h-px w-12 bg-amber-600" />
-          <span className="text-amber-500 text-xs uppercase tracking-[0.3em] font-semibold">
-            Denver's Premier Furniture Repair Specialists
-          </span>
-          <div className="h-px w-12 bg-amber-600" />
-        </div>
-
-        {/* Headline */}
-        <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-amber-50 leading-[0.95] mb-8 animate-slide-up">
-          Bringing Your
-          <br />
-          <em className="text-amber-400 not-italic">Beloved Furniture</em>
-          <br />
-          Back to Life
-        </h1>
-
-        {/* Sub */}
-        <p className="text-stone-300 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-up animation-delay-200">
-          Trusted furniture repair and restoration, now serving the Denver metro area.
-          We fix the pieces that matter most — from family heirlooms to everyday favorites, wood, upholstery, and everything in between.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up animation-delay-400">
-          <a
-            href="#contact"
-            className="group px-8 py-4 bg-amber-600 text-stone-950 font-bold uppercase tracking-widest text-sm rounded hover:bg-amber-400 transition-all duration-300 hover:shadow-lg hover:shadow-amber-600/30 hover:-translate-y-0.5"
-          >
-            Get a Free Quote
-            <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
-          </a>
-          <a
-            href="#portfolio"
-            className="px-8 py-4 border border-stone-500 text-stone-200 font-medium uppercase tracking-widest text-sm rounded hover:border-amber-600 hover:text-amber-400 transition-all duration-300"
-          >
-            View Our Work
-          </a>
-        </div>
-
-        {/* Stats strip */}
-        <div className="mt-20 grid grid-cols-3 gap-4 max-w-lg mx-auto animate-slide-up animation-delay-600">
-          {[["20+", "Years Experience"], ["1,200+", "Pieces Restored"], ["5★", "Google Rating"]].map(
-            ([num, label]) => (
-              <div key={label} className="text-center">
-                <div className="font-display text-3xl text-amber-400">{num}</div>
-                <div className="text-stone-400 text-xs uppercase tracking-widest mt-1">{label}</div>
+    <section id="hero" className="pt-[76px] min-h-screen bg-[#faf6f0] relative overflow-hidden flex items-center">
+      <div className="absolute top-[-10%] right-[-5%] w-[55%] aspect-square bg-[#ece4d8] rounded-[60%_40%_70%_30%/50%_60%_40%_50%] z-0" />
+      <div className="absolute bottom-[5%] left-[-8%] w-[30%] aspect-square bg-[#c4571a]/10 rounded-[40%_60%_30%_70%/60%_40%_60%_40%] z-0" />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center w-full">
+        <div className="flex flex-col">
+          <div className="inline-flex items-center gap-2 bg-[#5a7358]/12 border border-[#5a7358]/25 text-[#5a7358] px-4 py-2 rounded-full text-xs font-bold mb-7 self-start tracking-wide">
+            <span className="text-[10px]">✦</span> Denver's Trusted Furniture Repair Experts
+          </div>
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-[#3d2b1a] leading-[1.05] font-bold mb-6">
+            Give Your<br />Furniture a<br /><em className="text-[#c4571a] not-italic">Second Life</em>
+          </h1>
+          <p className="text-[#6b4e35] text-lg leading-relaxed max-w-[460px] mb-10">
+            We repair, restore, and refinish wood furniture of all kinds — all in your home. Locally owned in Denver by Brandon & Carla for 20+ years.
+          </p>
+          <div className="flex gap-4 flex-wrap mb-12">
+            <a href="#contact" className="px-8 py-4 bg-[#c4571a] text-white font-bold rounded-full hover:bg-[#d96b2a] transition-all shadow-lg shadow-[#c4571a]/30 hover:-translate-y-0.5 inline-block">Get a Free Quote →</a>
+            <a href="#portfolio" className="px-8 py-4 bg-[#ece4d8] text-[#3d2b1a] font-semibold rounded-full hover:bg-[#ddd4c4] transition-all border border-[#ece4d8] inline-block">See Our Work</a>
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            {[["⭐", "5.0 on Google"], ["✅", "100% Satisfaction"], ["🏠", "In-Home Service"]].map(([icon, label]) => (
+              <div key={label} className="flex items-center gap-2 bg-white border border-[#ece4d8] text-[#6b4e35] text-sm font-semibold px-4 py-2 rounded-full shadow-sm">
+                <span>{icon}</span>{label}
               </div>
-            )
-          )}
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-stone-500 animate-bounce">
-        <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-stone-500 to-transparent" />
+        <div className="relative hidden lg:block">
+          <div className="absolute top-6 -right-4 bg-[#c4571a] text-white rounded-2xl px-5 py-4 text-center shadow-lg z-20">
+            <div className="font-display text-3xl font-bold leading-none">20+</div>
+            <div className="text-[11px] font-semibold uppercase tracking-widest opacity-85 mt-1">Years<br />Experience</div>
+          </div>
+          <div className="w-full rounded-3xl overflow-hidden shadow-2xl shadow-[#2c1d10]/18">
+            <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=900&q=85" alt="Furniture repair workshop" className="w-full aspect-[4/5] object-cover" />
+          </div>
+          <div className="absolute -bottom-6 -left-6 w-[55%] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#faf6f0]">
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80" alt="Restored chair" className="w-full aspect-[4/3] object-cover" />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -278,39 +171,58 @@ function Hero() {
 
 function Services() {
   const [ref, visible] = useScrollReveal();
-
   return (
-    <section id="services" className="bg-stone-100 py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section header */}
-        <div className="mb-16 md:mb-20">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-amber-700" />
-            <span className="text-amber-700 text-xs uppercase tracking-[0.25em] font-semibold">What We Do</span>
+    <section id="services" className="bg-white py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-end mb-14">
+          <div>
+            <SectionTag label="Our Services" />
+            <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">We Fix All Types<br />of Wood Furniture</h2>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl text-stone-900 max-w-xl leading-tight">
-            Craftsmanship for Every Repair
-          </h2>
+          <p className="text-[#6b4e35] text-base leading-relaxed">From a wobbly dining chair to a family heirloom — if it's wood furniture, we can fix it. All work done in your home, on your schedule.</p>
         </div>
-
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SERVICES.map((s, i) => (
             <div
               key={s.id}
-              className="group bg-white border border-stone-200 p-8 rounded-sm hover:border-amber-600 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500 cursor-default"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "none" : "translateY(24px)",
-                transition: `opacity 0.6s ease ${i * 120}ms, transform 0.6s ease ${i * 120}ms, box-shadow 0.3s, border-color 0.3s`,
-              }}
+              className="bg-[#faf6f0] border border-[#ece4d8] rounded-2xl p-8 relative overflow-hidden hover:shadow-xl hover:shadow-[#2c1d10]/10 hover:-translate-y-1 transition-all duration-300 group"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: `opacity 0.6s ease ${i * 100}ms, transform 0.6s ease ${i * 100}ms, box-shadow 0.3s` }}
             >
-              <div className="text-4xl mb-6">{s.icon}</div>
-              <div className="w-8 h-0.5 bg-amber-600 mb-5 group-hover:w-12 transition-all duration-300" />
-              <h3 className="font-display text-xl text-stone-900 mb-3 leading-snug">{s.title}</h3>
-              <p className="text-stone-500 text-sm leading-relaxed">{s.desc}</p>
+              <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#c4571a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <span className="text-3xl mb-5 block">{s.emoji}</span>
+              <h3 className="font-display text-[19px] text-[#3d2b1a] font-bold mb-3">{s.title}</h3>
+              <p className="text-[#6b4e35] text-sm leading-[1.7]">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Process ──────────────────────────────────────────────────────────────────
+
+function Process() {
+  const [ref, visible] = useScrollReveal();
+  return (
+    <section className="bg-[#3d2b1a] py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <h2 className="font-display text-4xl lg:text-5xl text-[#faf6f0] leading-tight mb-16">
+          How It Works —<br /><em className="text-[#d96b2a]">Simple & Stress-Free</em>
+        </h2>
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {STEPS.map((s, i) => (
+            <div
+              key={s.num}
+              className="relative"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: `opacity 0.6s ease ${i * 120}ms, transform 0.6s ease ${i * 120}ms` }}
+            >
+              {i < STEPS.length - 1 && <div className="hidden lg:block absolute right-[-20px] top-[22px] text-[#faf6f0]/20 text-xl">→</div>}
+              <div className="w-[52px] h-[52px] rounded-full border-2 border-[#c4571a]/50 flex items-center justify-center mb-5">
+                <span className="font-display text-xl text-[#d96b2a] font-bold">{s.num}</span>
+              </div>
+              <h3 className="font-display text-xl text-[#faf6f0] font-semibold mb-3">{s.title}</h3>
+              <p className="text-[#faf6f0]/55 text-sm leading-[1.7]">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -321,80 +233,71 @@ function Services() {
 
 // ─── Portfolio ────────────────────────────────────────────────────────────────
 
-function PortfolioCard({ item, index, visible }) {
-  const [flipped, setFlipped] = useState(false);
-
+function Portfolio() {
+  const [ref, visible] = useScrollReveal(0.05);
   return (
-    <div
-      className="group cursor-pointer"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "none" : "translateY(32px)",
-        transition: `opacity 0.7s ease ${index * 100}ms, transform 0.7s ease ${index * 100}ms`,
-      }}
-      onClick={() => setFlipped(!flipped)}
-    >
-      <div className="bg-stone-900 rounded-sm overflow-hidden border border-stone-800 hover:border-amber-700 transition-colors duration-300">
-        {/* Images: before & after */}
-        <div className="grid grid-cols-2 gap-0">
-          <div className="relative">
-            <img
-              src={item.before}
-              alt={`${item.label} — Before`}
-              className="w-full aspect-[4/3] object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
-            />
-            <div className="absolute top-2 left-2 bg-stone-950/80 text-stone-400 text-[10px] uppercase tracking-wider px-2 py-1 rounded-sm font-medium">
-              Before
-            </div>
+    <section id="portfolio" className="bg-[#faf6f0] py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+          <div>
+            <SectionTag label="Before & After" />
+            <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">The Work Speaks<br />for Itself</h2>
           </div>
-          <div className="relative">
-            <img
-              src={item.after}
-              alt={`${item.label} — After`}
-              className="w-full aspect-[4/3] object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transition-transform"
-            />
-            <div className="absolute top-2 right-2 bg-amber-600/90 text-stone-950 text-[10px] uppercase tracking-wider px-2 py-1 rounded-sm font-bold">
-              After
-            </div>
-          </div>
+          <a href="#contact" className="px-6 py-3 bg-[#ece4d8] text-[#3d2b1a] font-semibold rounded-full hover:bg-[#ddd4c4] transition-all text-sm self-start md:self-end">Get a Quote →</a>
         </div>
-        {/* Label */}
-        <div className="p-5 border-t border-stone-800">
-          <h3 className="font-display text-amber-50 text-lg mb-1">{item.label}</h3>
-          <p className="text-stone-500 text-xs tracking-wide">{item.detail}</p>
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {PORTFOLIO.map((item, i) => (
+            <div
+              key={item.id}
+              className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 ${item.wide ? "sm:col-span-2" : ""}`}
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(28px)", transition: `opacity 0.65s ease ${i * 90}ms, transform 0.65s ease ${i * 90}ms` }}
+            >
+              <div className="grid grid-cols-2 relative">
+                <span className="absolute top-2.5 left-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#2c1d10]/60 text-white/90">Before</span>
+                <span className="absolute top-2.5 right-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#c4571a] text-white">After</span>
+                <img src={item.before} alt="Before" className="w-full aspect-[4/3] object-cover" />
+                <img src={item.after} alt="After" className="w-full aspect-[4/3] object-cover" />
+              </div>
+              <div className="px-5 py-4">
+                <div className="font-display text-[#3d2b1a] font-bold text-base">{item.label}</div>
+                <div className="text-[#9c7d62] text-xs mt-1">{item.detail}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-function Portfolio() {
-  const [ref, visible] = useScrollReveal(0.05);
+// ─── Reviews ──────────────────────────────────────────────────────────────────
 
+function Reviews() {
+  const [ref, visible] = useScrollReveal();
   return (
-    <section id="portfolio" className="bg-stone-950 py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-8 bg-amber-700" />
-              <span className="text-amber-700 text-xs uppercase tracking-[0.25em] font-semibold">Before & After</span>
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl text-amber-50 leading-tight max-w-sm">
-              The Work Speaks for Itself
-            </h2>
-          </div>
-          <p className="text-stone-400 max-w-xs text-sm leading-relaxed md:text-right">
-            Each project is a unique story. Browse a selection of our recent restorations across the Denver metro area.
-          </p>
+    <section className="bg-[#f3ede4] py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="mb-12">
+          <SectionTag label="Customer Reviews" />
+          <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">What Denver<br />Homeowners Say</h2>
         </div>
-
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {PORTFOLIO.map((item, i) => (
-            <PortfolioCard key={item.id} item={item} index={i} visible={visible} />
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {REVIEWS.map((r, i) => (
+            <div
+              key={r.id}
+              className="bg-white rounded-2xl p-7 border border-[#ece4d8] shadow-sm hover:shadow-lg transition-all duration-300"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: `opacity 0.6s ease ${i * 120}ms, transform 0.6s ease ${i * 120}ms` }}
+            >
+              <div className="text-[#c4571a] text-base tracking-[2px] mb-4">★★★★★</div>
+              <p className="font-display italic text-base text-[#3d2b1a] leading-[1.65] mb-6">"{r.text}"</p>
+              <div className="flex items-center gap-3 pt-4 border-t border-[#ece4d8]">
+                <div className="w-10 h-10 rounded-full bg-[#c4571a]/10 text-[#c4571a] flex items-center justify-center font-display text-lg font-bold flex-shrink-0">{r.initial}</div>
+                <div>
+                  <div className="text-sm font-bold text-[#3d2b1a]">{r.name}</div>
+                  <div className="text-xs text-[#9c7d62] mt-0.5">{r.loc}</div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -404,112 +307,42 @@ function Portfolio() {
 
 // ─── About ────────────────────────────────────────────────────────────────────
 
-const OWNERS = [
-  {
-    name: "Brandon Maestas",
-    role: "Co-Owner & Lead Restorer",
-    years: "20+",
-    specialty: "Wood Restoration & Structural Repair",
-    img: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=85",
-    bio: "Brandon has been repairing furniture since he was a teenager working summers in his uncle's shop. Over 20 years later, he's seen just about every kind of damage imaginable — and fixed it. His specialty is structural repair and wood restoration, from hairline scratches to full refinishes.",
-    tags: ["Wood Repair", "Antique Restoration", "Refinishing"],
-  },
-  {
-    name: "Carla Vega",
-    role: "Co-Owner & Upholstery Specialist",
-    years: "15+",
-    specialty: "Upholstery, Leather & Fabric",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=85",
-    bio: "Carla brings 15 years of upholstery and soft-furnishing expertise to the team. Whether it's a torn leather sofa, a beloved armchair in need of new fabric, or foam replacement, Carla handles every project with an eye for detail and a commitment to quality that keeps clients coming back.",
-    tags: ["Upholstery", "Leather Repair", "Fabric & Foam"],
-  },
-];
-
 function About() {
   const [ref, visible] = useScrollReveal(0.05);
-
   return (
-    <section id="about" className="bg-amber-950 py-24 md:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* Section header */}
-        <div
-          className="mb-16 md:mb-20"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(20px)",
-            transition: "opacity 0.7s ease, transform 0.7s ease",
-          }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-amber-500" />
-            <span className="text-amber-500 text-xs uppercase tracking-[0.25em] font-semibold">Meet the Owners</span>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-display text-4xl md:text-5xl text-amber-50 leading-tight max-w-lg">
-              The People Behind<br />
-              <span className="text-amber-400">Every Repair</span>
-            </h2>
-            <p className="text-amber-100/60 max-w-sm text-sm leading-relaxed md:text-right">
-              Restore & Refinish is a family-run Denver business. When you work with us, you're working directly with Brandon and Carla — not a franchise or a call center.
-            </p>
+    <section id="about" className="bg-white py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="mb-12">
+          <SectionTag label="Meet the Owners" />
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+            <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">The People Behind<br />Every Repair</h2>
+            <p className="text-[#6b4e35] text-sm leading-relaxed max-w-xs md:text-right">A locally owned Denver business — you work directly with Brandon and Carla, never a call center.</p>
           </div>
         </div>
-
-        {/* Owner cards */}
-        <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {OWNERS.map((owner, i) => (
             <div
               key={owner.name}
-              className="group bg-amber-900/40 border border-amber-800/50 rounded-sm overflow-hidden hover:border-amber-600/70 transition-colors duration-500"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "none" : "translateY(32px)",
-                transition: `opacity 0.8s ease ${i * 150}ms, transform 0.8s ease ${i * 150}ms, border-color 0.5s`,
-              }}
+              className="bg-[#faf6f0] border border-[#ece4d8] rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-[#2c1d10]/10 transition-all duration-300 group"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(28px)", transition: `opacity 0.7s ease ${i * 150}ms, transform 0.7s ease ${i * 150}ms` }}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2">
-                {/* Photo */}
                 <div className="relative overflow-hidden">
-                  <img
-                    src={owner.img}
-                    alt={owner.name}
-                    className="w-full h-72 sm:h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  />
-                  {/* Years badge */}
-                  <div className="absolute top-4 left-4 bg-amber-600 text-stone-950 px-3 py-2 rounded-sm text-center shadow-lg">
-                    <div className="font-display text-2xl leading-none font-bold">{owner.years}</div>
-                    <div className="text-[9px] uppercase tracking-widest font-bold mt-0.5">Yrs</div>
+                  <img src={owner.img} alt={owner.name} className="w-full h-64 sm:h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute top-3 left-3 bg-[#c4571a] text-white rounded-xl px-3 py-2 text-center shadow-md">
+                    <div className="font-display text-xl font-bold leading-none">{owner.years}</div>
+                    <div className="text-[9px] font-bold uppercase tracking-wide mt-0.5 opacity-85">Yrs</div>
                   </div>
                 </div>
-
-                {/* Content */}
                 <div className="p-7 flex flex-col justify-between">
                   <div>
-                    <div className="text-amber-500 text-[10px] uppercase tracking-[0.2em] font-semibold mb-2">
-                      {owner.role}
-                    </div>
-                    <h3 className="font-display text-2xl text-amber-50 mb-1 leading-snug">
-                      {owner.name}
-                    </h3>
-                    <div className="text-amber-600 text-xs font-medium mb-5 flex items-center gap-2">
-                      <span className="w-4 h-px bg-amber-600/50 inline-block" />
-                      {owner.specialty}
-                    </div>
-                    <p className="text-amber-100/60 text-sm leading-relaxed">
-                      {owner.bio}
-                    </p>
+                    <div className="text-[#c4571a] text-[10px] font-bold uppercase tracking-[0.2em] mb-1.5">{owner.role}</div>
+                    <h3 className="font-display text-2xl text-[#3d2b1a] font-bold mb-4">{owner.name}</h3>
+                    <p className="text-[#6b4e35] text-sm leading-[1.7]">{owner.bio}</p>
                   </div>
-
-                  {/* Specialty tags */}
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {owner.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 border border-amber-700/50 text-amber-500/80 rounded-sm"
-                      >
-                        {tag}
-                      </span>
+                  <div className="flex flex-wrap gap-2 mt-5">
+                    {owner.tags.map(tag => (
+                      <span key={tag} className="text-[10px] font-semibold uppercase tracking-wide px-3 py-1 rounded-full bg-[#c4571a]/10 text-[#c4571a]">{tag}</span>
                     ))}
                   </div>
                 </div>
@@ -517,227 +350,108 @@ function About() {
             </div>
           ))}
         </div>
-
-        {/* Bottom CTA strip */}
-        <div
-          className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-amber-800/40 pt-10"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: "opacity 0.8s ease 0.4s",
-          }}
-        >
-          <p className="text-amber-100/50 text-sm max-w-md">
-            Together, Brandon and Carla cover every type of furniture repair — from structural wood work to upholstery and leather. One shop, two specialists, zero compromises.
-          </p>
-          <a
-            href="#contact"
-            className="flex-shrink-0 px-7 py-3.5 bg-amber-500 text-stone-950 font-bold uppercase tracking-widest text-xs rounded hover:bg-amber-400 transition-colors"
-          >
-            Work With Us →
-          </a>
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-5 pt-10 border-t border-[#ece4d8]">
+          <p className="text-[#6b4e35] text-sm max-w-md">Together, Brandon and Carla bring decades of hands-on wood furniture expertise — every repair done in your home, on your schedule.</p>
+          <a href="#contact" className="flex-shrink-0 px-7 py-3.5 bg-[#c4571a] text-white font-bold rounded-full hover:bg-[#d96b2a] transition-colors shadow-md shadow-[#c4571a]/25 text-sm">Work With Us →</a>
         </div>
-
       </div>
     </section>
   );
 }
 
-// ─── Contact ──────────────────────────────────────────────────────────────────
+// ─── Contact ─────────────────────────────────────────────────────────────────
 
 function Contact() {
   const [ref, visible] = useScrollReveal();
+  const [fileName, setFileName] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "", email: "", phone: "", description: "", image: null,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: files ? files[0] : value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Netlify will handle actual submission via data-netlify
-    // For local demo, just show success state
-    setSubmitted(true);
-  };
 
   return (
-    <section id="contact" className="bg-stone-100 py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6">
-        <div
-          ref={ref}
-          className="grid grid-cols-1 lg:grid-cols-5 gap-16"
-        >
-          {/* Left panel */}
-          <div
-            className="lg:col-span-2"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateY(24px)",
-              transition: "opacity 0.7s ease, transform 0.7s ease",
-            }}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-8 bg-amber-700" />
-              <span className="text-amber-700 text-xs uppercase tracking-[0.25em] font-semibold">Get in Touch</span>
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl text-stone-900 leading-tight mb-8">
-              Start With a<br />
-              <span className="text-amber-700">Free Quote</span>
+    <section id="contact" className="bg-[#f3ede4] py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: "opacity 0.7s ease, transform 0.7s ease" }}>
+            <SectionTag label="Contact Us" />
+            <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight mb-6">
+              Get Your Free<br /><span className="text-[#c4571a]">Estimate Today</span>
             </h2>
-            <p className="text-stone-500 leading-relaxed mb-10 text-sm">
-              Describe your piece and upload a photo of the damage — we'll get back to you within one business day with a no-obligation estimate.
-            </p>
-
-            <div className="space-y-6">
+            <p className="text-[#6b4e35] text-base leading-relaxed mb-10">Describe your piece, upload a photo, and Brandon will personally respond with a no-obligation quote within one business day.</p>
+            <div className="flex flex-col gap-4">
               {[
-                ["📍", "Service Area", "Denver Metro · Boulder · Aurora\nLakewood · Highlands Ranch"],
                 ["📞", "Phone", "(720) 555-0192"],
                 ["📧", "Email", "hello@restoreandrefinish.com"],
-                ["🕐", "Hours", "Mon–Fri: 8am–6pm\nSat: 9am–3pm"],
-              ].map(([icon, label, value]) => (
-                <div key={label} className="flex gap-4">
-                  <span className="text-xl mt-0.5">{icon}</span>
+                ["📍", "Service Area", "Denver · Boulder · Aurora · Lakewood · Highlands Ranch"],
+                ["🕐", "Hours", "Mon–Fri 8am–6pm · Sat 9am–3pm"],
+              ].map(([icon, label, val]) => (
+                <div key={label} className="bg-white rounded-xl p-5 flex gap-4 items-start border border-[#ece4d8]">
+                  <div className="w-11 h-11 rounded-xl bg-[#c4571a]/10 flex items-center justify-center text-xl flex-shrink-0">{icon}</div>
                   <div>
-                    <div className="text-stone-900 font-semibold text-sm mb-0.5">{label}</div>
-                    <div className="text-stone-500 text-sm whitespace-pre-line">{value}</div>
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#9c7d62] mb-1">{label}</div>
+                    <div className="text-[#3d2b1a] font-medium text-sm leading-snug">{val}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Form */}
-          <div
-            className="lg:col-span-3"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateY(24px)",
-              transition: "opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s",
-            }}
-          >
+          <div style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: "opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s" }}>
             {submitted ? (
-              <div className="h-full flex flex-col items-center justify-center text-center py-20 bg-white border border-stone-200 rounded-sm px-8">
-                <div className="text-5xl mb-6">🪵</div>
-                <h3 className="font-display text-3xl text-stone-900 mb-4">Message Received!</h3>
-                <p className="text-stone-500 max-w-sm">
-                  Thank you for reaching out. Brandon will personally review your project and respond within one business day.
-                </p>
+              <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-[#ece4d8]">
+                <div className="text-5xl mb-5">🎉</div>
+                <h3 className="font-display text-2xl text-[#3d2b1a] mb-3">Quote Request Sent!</h3>
+                <p className="text-[#6b4e35] text-sm">Thank you! Brandon will personally review your project and respond within one business day.</p>
               </div>
             ) : (
-              <form
-                name="restore-refinish-quote"
-                method="POST"
-                data-netlify="true"
-                encType="multipart/form-data"
-                onSubmit={handleSubmit}
-                className="bg-white border border-stone-200 rounded-sm p-8 md:p-10 shadow-sm"
-              >
-                {/* Netlify hidden field */}
-                <input type="hidden" name="form-name" value="restore-refinish-quote" />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-                  {/* Name */}
-                  <div>
-                    <label className="block text-stone-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                      Full Name <span className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Jane Doe"
-                      className="w-full px-4 py-3 border border-stone-200 rounded-sm text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-colors"
-                    />
-                  </div>
-                  {/* Email */}
-                  <div>
-                    <label className="block text-stone-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                      Email <span className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="jane@example.com"
-                      className="w-full px-4 py-3 border border-stone-200 rounded-sm text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Phone */}
-                <div className="mb-5">
-                  <label className="block text-stone-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="(720) 555-0100"
-                    className="w-full px-4 py-3 border border-stone-200 rounded-sm text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-colors"
-                  />
-                </div>
-
-                {/* Description */}
-                <div className="mb-5">
-                  <label className="block text-stone-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                    Describe the Damage <span className="text-amber-600">*</span>
-                  </label>
-                  <textarea
-                    name="description"
-                    required
-                    rows={5}
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="e.g. 'My 1940s oak dining chair has a broken back spindle and the joints are loose. The finish is also worn in several spots...'"
-                    className="w-full px-4 py-3 border border-stone-200 rounded-sm text-stone-800 placeholder-stone-300 text-sm focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Image upload */}
-                <div className="mb-8">
-                  <label className="block text-stone-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                    Upload a Photo of the Damage
-                  </label>
-                  <div className="relative border-2 border-dashed border-stone-200 rounded-sm p-6 text-center hover:border-amber-500 transition-colors cursor-pointer group">
-                    <input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                    <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">📸</div>
-                    {formData.image ? (
-                      <p className="text-amber-700 text-sm font-medium">{formData.image.name}</p>
-                    ) : (
-                      <>
-                        <p className="text-stone-400 text-sm">Click to browse or drag & drop</p>
-                        <p className="text-stone-300 text-xs mt-1">JPG, PNG, HEIC up to 10MB</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-amber-700 text-amber-50 font-bold uppercase tracking-widest text-sm rounded-sm hover:bg-amber-600 transition-colors duration-300 hover:shadow-lg hover:shadow-amber-900/20"
+              <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-sm border border-[#ece4d8]">
+                <h3 className="font-display text-2xl text-[#3d2b1a] mb-1">Request a Free Quote</h3>
+                <p className="text-[#9c7d62] text-sm mb-7">We'll get back to you within 1 business day.</p>
+                <form
+                  name="restore-refinish-quote"
+                  data-netlify="true"
+                  method="POST"
+                  encType="multipart/form-data"
+                  onSubmit={e => { e.preventDefault(); setSubmitted(true); }}
+                  className="flex flex-col gap-4"
                 >
-                  Send My Quote Request →
-                </button>
-
-                <p className="text-stone-400 text-xs text-center mt-4">
-                  No spam. No obligations. Just honest woodworking.
-                </p>
-              </form>
+                  <input type="hidden" name="form-name" value="restore-refinish-quote" />
+                  <div className="grid grid-cols-2 gap-4">
+                    {[["first-name", "First Name *", "Jane"], ["last-name", "Last Name", "Doe"]].map(([name, label, ph]) => (
+                      <div key={name}>
+                        <label className="block text-xs font-bold text-[#6b4226] mb-2 tracking-wide">{label}</label>
+                        <input type="text" name={name} placeholder={ph} required={label.includes("*")}
+                          className="w-full px-4 py-3 bg-[#faf6f0] border border-[#ece4d8] rounded-lg text-[#2c1d10] text-sm placeholder-[#9c7d62] focus:outline-none focus:border-[#c4571a] focus:ring-2 focus:ring-[#c4571a]/12 transition-colors" />
+                      </div>
+                    ))}
+                  </div>
+                  {[["email", "Email *", "jane@email.com", "email"], ["phone", "Phone", "(720) 555-0100", "tel"]].map(([name, label, ph, type]) => (
+                    <div key={name}>
+                      <label className="block text-xs font-bold text-[#6b4226] mb-2 tracking-wide">{label}</label>
+                      <input type={type} name={name} placeholder={ph} required={label.includes("*")}
+                        className="w-full px-4 py-3 bg-[#faf6f0] border border-[#ece4d8] rounded-lg text-[#2c1d10] text-sm placeholder-[#9c7d62] focus:outline-none focus:border-[#c4571a] focus:ring-2 focus:ring-[#c4571a]/12 transition-colors" />
+                    </div>
+                  ))}
+                  <div>
+                    <label className="block text-xs font-bold text-[#6b4226] mb-2 tracking-wide">Describe the Damage *</label>
+                    <textarea name="description" rows={4} required placeholder="What piece needs repair? What's wrong with it?"
+                      className="w-full px-4 py-3 bg-[#faf6f0] border border-[#ece4d8] rounded-lg text-[#2c1d10] text-sm placeholder-[#9c7d62] focus:outline-none focus:border-[#c4571a] focus:ring-2 focus:ring-[#c4571a]/12 transition-colors resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-[#6b4226] mb-2 tracking-wide">Upload a Photo</label>
+                    <label className="block border-2 border-dashed border-[#ece4d8] rounded-lg p-5 text-center cursor-pointer hover:border-[#c4571a] transition-colors relative">
+                      <input type="file" name="image" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        onChange={e => setFileName(e.target.files[0]?.name || null)} />
+                      <div className="text-2xl mb-1">📸</div>
+                      <div className="text-sm text-[#9c7d62]">
+                        {fileName ? <span className="text-[#c4571a] font-semibold">{fileName}</span> : <>Drag & drop or <span className="text-[#c4571a] font-semibold">browse files</span></>}
+                      </div>
+                    </label>
+                  </div>
+                  <button type="submit" className="w-full py-4 bg-[#c4571a] text-white font-bold rounded-full hover:bg-[#d96b2a] transition-all shadow-lg shadow-[#c4571a]/25 text-base mt-1">
+                    Send My Quote Request →
+                  </button>
+                  <p className="text-[#9c7d62] text-xs text-center">🔒 Your info is never shared or sold.</p>
+                </form>
+              </div>
             )}
           </div>
         </div>
@@ -750,11 +464,10 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="bg-stone-950 border-t border-stone-800 py-10">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
-        <div className="font-display text-stone-400 text-base">Restore & Refinish Furniture Repair</div>
-        <p>© {new Date().getFullYear()} Restore & Refinish Furniture Repair LLC · Denver, CO · All rights reserved.</p>
-        <p>Built with ♥ and sawdust</p>
+    <footer className="bg-[#3d2b1a] py-9 px-6 lg:px-10">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="font-display text-[#faf6f0] text-lg">Restore & Refinish Furniture Repair</div>
+        <div className="text-[#faf6f0]/40 text-xs">© {new Date().getFullYear()} Restore & Refinish Furniture Repair LLC · Denver, CO</div>
       </div>
     </footer>
   );
@@ -764,11 +477,13 @@ function Footer() {
 
 export default function App() {
   return (
-    <div className="font-body antialiased">
+    <div className="antialiased">
       <Navbar />
       <Hero />
       <Services />
+      <Process />
       <Portfolio />
+      <Reviews />
       <About />
       <Contact />
       <Footer />
