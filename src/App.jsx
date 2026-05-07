@@ -238,7 +238,7 @@ function Services() {
           </div>
           <p className="text-[#6b4e35] text-base leading-relaxed">From a wobbly dining chair to a family heirloom — if it's wood furniture, we can fix it. All work done in your home, on your schedule.</p>
         </div>
-        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SERVICES.map((s, i) => (
             <div
               key={s.id}
@@ -267,7 +267,7 @@ function Process() {
         <h2 className="font-display text-4xl lg:text-5xl text-[#faf6f0] leading-tight mb-16">
           How It Works —<br /><em className="text-[#d96b2a]">Simple & Stress-Free</em>
         </h2>
-        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {STEPS.map((s, i) => (
             <div
               key={s.num}
@@ -316,12 +316,11 @@ function Portfolio() {
 
         {/* Portfolio grid */}
         {!loading && items.length > 0 && (
-          <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {items.map((item, i) => (
               <div
                 key={item.label}
                 className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 ${item.wide ? "sm:col-span-2" : ""}`}
-                style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(28px)", transition: `opacity 0.65s ease ${i * 90}ms, transform 0.65s ease ${i * 90}ms` }}
               >
                 <div className="grid grid-cols-2 relative">
                   <span className="absolute top-2.5 left-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#2c1d10]/60 text-white/90">Before</span>
@@ -362,7 +361,7 @@ function Reviews() {
           <SectionTag label="Customer Reviews" />
           <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">What Denver<br />Homeowners Say</h2>
         </div>
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {REVIEWS.map((r, i) => (
             <div
               key={r.id}
@@ -400,7 +399,7 @@ function About() {
             <p className="text-[#6b4e35] text-sm leading-relaxed max-w-xs md:text-right">A locally owned Denver business — you work directly with Brandon and Carla, never a call center.</p>
           </div>
         </div>
-        <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {OWNERS.map((owner, i) => (
             <div
               key={owner.name}
