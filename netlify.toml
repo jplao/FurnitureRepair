@@ -1,8 +1,23 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
+[build.environment]
+  NODE_VERSION = "18"
+
+# ─── Redirects ────────────────────────────────────────────────────────────────
+
+# SPA fallback — serves index.html for all React routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# ─── Headers ─────────────────────────────────────────────────────────────────
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"

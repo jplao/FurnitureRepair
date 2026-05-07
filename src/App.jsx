@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
+// ─── Static Data ───────────────────────────────────────────────────────────────
 
 const SERVICES = [
   { id: 1, emoji: "🪚", title: "Scratch & Dent Repair", desc: "Invisible blending using hand-mixed stains matched exactly to your piece's original finish. No patches, no traces." },
@@ -9,11 +9,13 @@ const SERVICES = [
   { id: 4, emoji: "✨", title: "Refinishing & Polishing", desc: "Strip decades of wear and apply a hand-rubbed oil, lacquer, or shellac finish perfectly suited to your piece." },
 ];
 
-const PORTFOLIO = [
-  { id: 1, label: "Victorian Parlour Chair", detail: "Reglued joints · Finish restored", before: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80", after: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80", wide: true },
-  { id: 2, label: "Mid-Century Credenza", detail: "Deep scratch repair · Tung oil refinish", before: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80", after: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600&q=80", wide: false },
-  { id: 3, label: "Farmhouse Dining Table", detail: "Water ring removal · Full refinish", before: "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=600&q=80", after: "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80", wide: false },
-  { id: 4, label: "Antique Secretary Desk", detail: "Veneer rebonded · Shellac polish", before: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&q=80", after: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80", wide: true },
+// ─── Portfolio filenames — add new filenames here when new items are added ─────
+// Each filename corresponds to a JSON file in /public/portfolio/
+const PORTFOLIO_FILES = [
+  "victorian-parlour-chair",
+  "mid-century-credenza",
+  "farmhouse-dining-table",
+  "antique-secretary-desk",
 ];
 
 const REVIEWS = [
@@ -48,7 +50,7 @@ const OWNERS = [
   },
 ];
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
+// ─── Hook: scroll reveal ───────────────────────────────────────────────────────
 
 function useScrollReveal(threshold = 0.12) {
   const ref = useRef(null);
@@ -62,6 +64,61 @@ function useScrollReveal(threshold = 0.12) {
     return () => obs.disconnect();
   }, [threshold]);
   return [ref, visible];
+}
+
+// ─── Hook: load portfolio from CMS JSON files ─────────────────────────────────
+// First tries to fetch the list of portfolio files from the Netlify Function
+// (/.netlify/functions/portfolio-items), which auto-discovers any new items
+// added via the CMS admin panel without needing a code change.
+// Falls back to the PORTFOLIO_FILES array if the function isn't available
+// (e.g. during local development).
+
+function usePortfolio() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        // Try the Netlify Function first (works in production)
+        let filenames = PORTFOLIO_FILES;
+        try {
+          const res = await fetch("/.netlify/functions/portfolio-items");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.items && data.items.length > 0) {
+              filenames = data.items;
+            }
+          }
+        } catch {
+          // Function not available (local dev) — use the static array
+        }
+
+        // Fetch each individual JSON file
+        const results = await Promise.all(
+          filenames.map(name =>
+            fetch(`/portfolio/${name}.json`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          )
+        );
+
+        // Filter out failed fetches and sort by the order field
+        const valid = results
+          .filter(Boolean)
+          .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+        setItems(valid);
+      } catch {
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  return { items, loading };
 }
 
 // ─── Tag ──────────────────────────────────────────────────────────────────────
@@ -235,6 +292,8 @@ function Process() {
 
 function Portfolio() {
   const [ref, visible] = useScrollReveal(0.05);
+  const { items, loading } = usePortfolio();
+
   return (
     <section id="portfolio" className="bg-[#faf6f0] py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -245,26 +304,48 @@ function Portfolio() {
           </div>
           <a href="#contact" className="px-6 py-3 bg-[#ece4d8] text-[#3d2b1a] font-semibold rounded-full hover:bg-[#ddd4c4] transition-all text-sm self-start md:self-end">Get a Quote →</a>
         </div>
-        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {PORTFOLIO.map((item, i) => (
-            <div
-              key={item.id}
-              className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 ${item.wide ? "sm:col-span-2" : ""}`}
-              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(28px)", transition: `opacity 0.65s ease ${i * 90}ms, transform 0.65s ease ${i * 90}ms` }}
-            >
-              <div className="grid grid-cols-2 relative">
-                <span className="absolute top-2.5 left-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#2c1d10]/60 text-white/90">Before</span>
-                <span className="absolute top-2.5 right-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#c4571a] text-white">After</span>
-                <img src={item.before} alt="Before" className="w-full aspect-[4/3] object-cover" />
-                <img src={item.after} alt="After" className="w-full aspect-[4/3] object-cover" />
+
+        {/* Loading state */}
+        {loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-[#ece4d8] rounded-2xl animate-pulse aspect-[4/3]" />
+            ))}
+          </div>
+        )}
+
+        {/* Portfolio grid */}
+        {!loading && items.length > 0 && (
+          <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map((item, i) => (
+              <div
+                key={item.label}
+                className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 ${item.wide ? "sm:col-span-2" : ""}`}
+                style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(28px)", transition: `opacity 0.65s ease ${i * 90}ms, transform 0.65s ease ${i * 90}ms` }}
+              >
+                <div className="grid grid-cols-2 relative">
+                  <span className="absolute top-2.5 left-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#2c1d10]/60 text-white/90">Before</span>
+                  <span className="absolute top-2.5 right-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#c4571a] text-white">After</span>
+                  <img src={item.before} alt={`${item.label} — Before`} className="w-full aspect-[4/3] object-cover" />
+                  <img src={item.after} alt={`${item.label} — After`} className="w-full aspect-[4/3] object-cover" />
+                </div>
+                <div className="px-5 py-4">
+                  <div className="font-display text-[#3d2b1a] font-bold text-base">{item.label}</div>
+                  <div className="text-[#9c7d62] text-xs mt-1">{item.detail}</div>
+                </div>
               </div>
-              <div className="px-5 py-4">
-                <div className="font-display text-[#3d2b1a] font-bold text-base">{item.label}</div>
-                <div className="text-[#9c7d62] text-xs mt-1">{item.detail}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty state — only shows if CMS has no items yet */}
+        {!loading && items.length === 0 && (
+          <div className="text-center py-20 text-[#9c7d62]">
+            <div className="text-4xl mb-4">📸</div>
+            <p className="font-display text-xl text-[#3d2b1a] mb-2">Portfolio coming soon</p>
+            <p className="text-sm">Check back to see our latest before & after transformations.</p>
+          </div>
+        )}
       </div>
     </section>
   );
