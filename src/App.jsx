@@ -68,7 +68,7 @@ function useScrollReveal(threshold = 0.12) {
 
 // ─── Hook: load portfolio from CMS JSON files ─────────────────────────────────
 // First tries to fetch the list of portfolio files from the Netlify Function
-// (/.netlify/functions/portfolio-items), which auto-discovers any new items
+// (/portfolio-index.json), which auto-discovers any new items
 // added via the CMS admin panel without needing a code change.
 // Falls back to the PORTFOLIO_FILES array if the function isn't available
 // (e.g. during local development).
@@ -83,7 +83,7 @@ function usePortfolio() {
         // Try the Netlify Function first (works in production)
         let filenames = PORTFOLIO_FILES;
         try {
-          const res = await fetch("/.netlify/functions/portfolio-items");
+          const res = await fetch("/portfolio-index.json");
           if (res.ok) {
             const data = await res.json();
             if (data.items && data.items.length > 0) {
