@@ -68,7 +68,7 @@ function useScrollReveal(threshold = 0.12) {
 
 // ─── Hook: load portfolio from CMS JSON files ─────────────────────────────────
 // First tries to fetch the list of portfolio files from the Netlify Function
-// (/portfolio-index.json), which auto-discovers any new items
+// (/.netlify/functions/portfolio-items), which auto-discovers any new items
 // added via the CMS admin panel without needing a code change.
 // Falls back to the PORTFOLIO_FILES array if the function isn't available
 // (e.g. during local development).
@@ -83,7 +83,7 @@ function usePortfolio() {
         // Try the Netlify Function first (works in production)
         let filenames = PORTFOLIO_FILES;
         try {
-          const res = await fetch("/portfolio-index.json");
+          const res = await fetch("/.netlify/functions/portfolio-items");
           if (res.ok) {
             const data = await res.json();
             if (data.items && data.items.length > 0) {
@@ -238,7 +238,7 @@ function Services() {
           </div>
           <p className="text-[#6b4e35] text-base leading-relaxed">From a wobbly dining chair to a family heirloom — if it's wood furniture, we can fix it. All work done in your home, on your schedule.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SERVICES.map((s, i) => (
             <div
               key={s.id}
@@ -267,7 +267,7 @@ function Process() {
         <h2 className="font-display text-4xl lg:text-5xl text-[#faf6f0] leading-tight mb-16">
           How It Works —<br /><em className="text-[#d96b2a]">Simple & Stress-Free</em>
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {STEPS.map((s, i) => (
             <div
               key={s.num}
@@ -288,11 +288,107 @@ function Process() {
   );
 }
 
+// ─── Portfolio Lightbox ───────────────────────────────────────────────────────
+
+function Lightbox({ item, onClose }) {
+  const [view, setView] = useState("after");
+
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
+      onClick={onClose}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-[#2c1d10]/90 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        className="relative z-10 w-full max-w-5xl bg-white rounded-2xl overflow-hidden shadow-2xl"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-9 h-9 bg-[#2c1d10]/60 hover:bg-[#2c1d10] text-white rounded-full flex items-center justify-center transition-colors text-lg leading-none"
+        >
+          ×
+        </button>
+
+        {/* Before / After toggle */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex bg-[#2c1d10]/60 backdrop-blur-sm rounded-full p-1 gap-1">
+          <button
+            onClick={() => setView("before")}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-all ${view === "before" ? "bg-white text-[#3d2b1a]" : "text-white/70 hover:text-white"}`}
+          >
+            Before
+          </button>
+          <button
+            onClick={() => setView("after")}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-all ${view === "after" ? "bg-[#c4571a] text-white" : "text-white/70 hover:text-white"}`}
+          >
+            After
+          </button>
+        </div>
+
+        {/* Main image */}
+        <div className="relative bg-[#1a1008]">
+          <img
+            src={view === "before" ? item.before : item.after}
+            alt={`${item.label} — ${view}`}
+            className="w-full max-h-[65vh] object-contain"
+          />
+        </div>
+
+        {/* Side-by-side thumbnails + info */}
+        <div className="p-6 flex flex-col sm:flex-row gap-6 items-start">
+          <div className="flex gap-3 flex-shrink-0">
+            <div
+              className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all ${view === "before" ? "border-[#3d2b1a]" : "border-transparent opacity-60 hover:opacity-90"}`}
+              onClick={() => setView("before")}
+            >
+              <img src={item.before} alt="Before" className="w-24 h-16 object-cover" />
+              <div className="text-[10px] font-bold uppercase tracking-wide text-center py-1 bg-[#ece4d8] text-[#6b4e35]">Before</div>
+            </div>
+            <div
+              className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all ${view === "after" ? "border-[#c4571a]" : "border-transparent opacity-60 hover:opacity-90"}`}
+              onClick={() => setView("after")}
+            >
+              <img src={item.after} alt="After" className="w-24 h-16 object-cover" />
+              <div className="text-[10px] font-bold uppercase tracking-wide text-center py-1 bg-[#c4571a] text-white">After</div>
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-display text-2xl text-[#3d2b1a] font-bold mb-1">{item.label}</h3>
+            <p className="text-[#9c7d62] text-sm mb-4">{item.detail}</p>
+            <a
+              href="#contact"
+              onClick={onClose}
+              className="inline-block px-5 py-2.5 bg-[#c4571a] text-white text-sm font-bold rounded-full hover:bg-[#d96b2a] transition-colors"
+            >
+              Get a Similar Repair →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Portfolio ────────────────────────────────────────────────────────────────
 
 function Portfolio() {
-  const [ref, visible] = useScrollReveal(0);
   const { items, loading } = usePortfolio();
+  const [selected, setSelected] = useState(null);
 
   return (
     <section id="portfolio" className="bg-[#faf6f0] py-24 lg:py-32">
@@ -317,16 +413,23 @@ function Portfolio() {
         {/* Portfolio grid */}
         {!loading && items.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {items.map((item, i) => (
+            {items.map((item) => (
               <div
                 key={item.label}
-                className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 ${item.wide ? "sm:col-span-2" : ""}`}
+                onClick={() => setSelected(item)}
+                className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#2c1d10]/12 transition-all duration-300 cursor-pointer group ${item.wide ? "sm:col-span-2" : ""}`}
               >
                 <div className="grid grid-cols-2 relative">
                   <span className="absolute top-2.5 left-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#2c1d10]/60 text-white/90">Before</span>
                   <span className="absolute top-2.5 right-2.5 z-10 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-[#c4571a] text-white">After</span>
-                  <img src={item.before} alt={`${item.label} — Before`} className="w-full aspect-[4/3] object-cover" />
-                  <img src={item.after} alt={`${item.label} — After`} className="w-full aspect-[4/3] object-cover" />
+                  <img src={item.before} alt={`${item.label} — Before`} className="w-full aspect-[4/3] object-cover group-hover:brightness-110 transition-all duration-300" />
+                  <img src={item.after} alt={`${item.label} — After`} className="w-full aspect-[4/3] object-cover group-hover:brightness-110 transition-all duration-300" />
+                  {/* Click hint */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/90 text-[#3d2b1a] text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full shadow-lg">
+                      Click to expand
+                    </div>
+                  </div>
                 </div>
                 <div className="px-5 py-4">
                   <div className="font-display text-[#3d2b1a] font-bold text-base">{item.label}</div>
@@ -337,7 +440,7 @@ function Portfolio() {
           </div>
         )}
 
-        {/* Empty state — only shows if CMS has no items yet */}
+        {/* Empty state */}
         {!loading && items.length === 0 && (
           <div className="text-center py-20 text-[#9c7d62]">
             <div className="text-4xl mb-4">📸</div>
@@ -346,6 +449,9 @@ function Portfolio() {
           </div>
         )}
       </div>
+
+      {/* Lightbox */}
+      {selected && <Lightbox item={selected} onClose={() => setSelected(null)} />}
     </section>
   );
 }
@@ -361,7 +467,7 @@ function Reviews() {
           <SectionTag label="Customer Reviews" />
           <h2 className="font-display text-4xl lg:text-5xl text-[#3d2b1a] leading-tight">What Denver<br />Homeowners Say</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {REVIEWS.map((r, i) => (
             <div
               key={r.id}
@@ -388,7 +494,7 @@ function Reviews() {
 // ─── About ────────────────────────────────────────────────────────────────────
 
 function About() {
-  const [ref, visible] = useScrollReveal(0);
+  const [ref, visible] = useScrollReveal(0.05);
   return (
     <section id="about" className="bg-white py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -399,7 +505,7 @@ function About() {
             <p className="text-[#6b4e35] text-sm leading-relaxed max-w-xs md:text-right">A locally owned Denver business — you work directly with Brandon and Carla, never a call center.</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {OWNERS.map((owner, i) => (
             <div
               key={owner.name}

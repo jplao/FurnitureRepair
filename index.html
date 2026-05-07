@@ -4,21 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Restore & Refinish Furniture Repair — Denver's trusted furniture repair and restoration specialists. Wood, upholstery, leather & more. Serving the Denver metro area for 20+ years." />
-    <title>Restore & Refinish Furniture Repair | Denver Furniture Repair & Restoration</title>
+    <meta name="description" content="Restore & Refinish Furniture Repair — Denver's trusted furniture repair and restoration specialists. Serving the Denver metro area for 20+ years." />
+    <title>Restore & Refinish Furniture Repair | Denver</title>
 
-    <!--
-      ╔══════════════════════════════════════════════════════════════╗
-      ║           NETLIFY FORM DETECTION — REQUIRED SNIPPET         ║
-      ║                                                              ║
-      ║  Netlify's build bots scan static HTML for forms. Because    ║
-      ║  React renders forms client-side (post-build), Netlify       ║
-      ║  never sees them. The fix: paste an IDENTICAL hidden form    ║
-      ║  here in the static HTML. Netlify registers it; React's      ║
-      ║  form POSTs to it at runtime. The hidden attribute means     ║
-      ║  users never see it.                                         ║
-      ╚══════════════════════════════════════════════════════════════╝
-    -->
+    <!-- Netlify Identity Widget — handles invite/recovery tokens on the main site -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Netlify form detection snippet -->
     <form name="restore-refinish-quote" netlify netlify-honeypot="bot-field" hidden>
       <input type="text"  name="name"        />
       <input type="email" name="email"       />
@@ -26,11 +18,22 @@
       <textarea           name="description" ></textarea>
       <input type="file"  name="image"       />
     </form>
-    <!-- END NETLIFY FORM DETECTION SNIPPET -->
-
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Redirect identity tokens to /admin so CMS can process them -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", function(user) {
+          if (!user) {
+            window.netlifyIdentity.on("login", function() {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
   </body>
 </html>
